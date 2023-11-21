@@ -13,7 +13,7 @@ MM = 2;
 %% Remez equiripple
 % Vorgaben
 fpass = Fs1/4 + 530;
-fstop = Fs1/4 - 530; % has to be determined from the parameters ...
+fstop = Fs1/4; % has to be determined from the parameters ...
                      % above such that when down- or up-sampling ...
                      % is applied NO aliasing occurs
                      % Die Frequenz fstop sollte sich an B/2 des Eingangssignals orientieren
@@ -25,13 +25,15 @@ delta_stop_dB = db(delta_stop);
 % high-pass                      fstop fpass  pass stop rip_pass rip_stop 
 [N_FIR_HP_INT, fo, mo, w] = firpmord( [fstop fpass], [0 1], [0.01 0.01], Fs2 );
 
-% Grade Anzahl an Koeffizienten erzwingen
+% Ordnung erhöhen, um wirklich die geforderte Sperrdämpfung zu erreichen und ...
+% gerade Anzahl an Koeffizienten erzwingen 
+N_FIR_HP_INT = N_FIR_HP_INT + 1;
 if rem(N_FIR_HP_INT,2) == 1 
-    N_FIR_HP_INT = N_FIR_HP + 1; 
+    N_FIR_HP_INT = N_FIR_HP_INT + 1; 
 end
 
-% Das eigentliche Design...
-b_FIR_HP_int = firpm(N_FIR_HP_INT + 2, fo, mo, w);
+% Das eigentliche FIR-Filterdesign...
+b_FIR_HP_int = firpm(N_FIR_HP_INT, fo, mo, w);
 %b_FIR_HP = firpm(N_FIR_HP_INT, fo, mo, w);
 
 
@@ -51,6 +53,7 @@ b_FIR_HP_int_2_1 = zeros(1, length(b_FIR_HP_int(2:MM:end))*2);
 
 b_FIR_HP_int_2_0(1:2:end) = b_FIR_HP_int(1:MM:end);
 b_FIR_HP_int_2_1(1:2:end) = b_FIR_HP_int(2:MM:end);
+
 
 % Definition von z
 z = exp(-1j*2*pi*freq);
@@ -85,6 +88,7 @@ grid
 
 fprintf('\n Order of filter, N_FIR_HP_INT = %d\n\n', N_FIR_HP_INT);
 
+pause
 %---------------------------------------------------------------------------
 % write to file !
 % create header file and info
@@ -112,5 +116,38 @@ write_coeff(file_ID, 'b_FIR_int_HP', b_FIR_HP_int, length(b_FIR_HP_int));
 
 fclose(file_ID);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Exportieren des entworfenen Filters in Form eines Headerfiles
+%---------------------------------------------------------------------------
+% write to file !
+% create header file and info
+fprintf('coefficients are written to file ==> ');
+filename = 'int_by_2_FIR_PP_decomp.h';
+fprintf(filename);
+fprintf('\n\n');
+
+file_ID = fopen(filename, 'w');		% generate include-file
+fprintf(file_ID, '//------------------------------------------- \n');
+fprintf(file_ID, '// designed with -- int_by_2_FIR.m -- \n');
+fprintf(file_ID, ['// ',date,'\n'] );
+fprintf(file_ID, '// Fs = %6.2f\n', Fs1 );
+fprintf(file_ID, '// fstop = %6.2f\n', fstop);
+fprintf(file_ID, '// fpass = %6.2f\n', fpass);
+fprintf(file_ID, '// delta_pass = %6.2f\n', delta_pass);
+fprintf(file_ID, '// delta_stop_dB = %6.2f\n', delta_stop_dB);
+fprintf(file_ID, '// N_FIR = %d\n',  length(b_FIR_HP_int(1:MM:end))); %N_FIR_HP_DEC
+fprintf(file_ID, '// N_FIR = %d\n',  length(b_FIR_HP_int(2:MM:end))); %N_FIR_HP_DEC
+fprintf(file_ID, '//------------------------------------------- \n');
+
+% fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_INT_BRANCH_2_0_LAB2 %d\n', length(b_FIR_int_HP)); % Ist hier nicht ein Fehler???
+fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_INT_BRANCH_2_0_LAB2 %d\n', length(b_FIR_HP_int(1:MM:end))); % Korrigierte Zeile
+fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_INT_BRANCH_2_1_LAB2 %d\n', length(b_FIR_HP_int(2:MM:end))); % Korrigierte Zeile
+fprintf(file_ID, 'short H_filt_FIR_design_int_2_0_lab2[N_DELAYS_FIR_DESIGN_INT_BRANCH_2_0_LAB2]; \n');
+fprintf(file_ID, 'short H_filt_FIR_design_int_2_1_lab2[N_DELAYS_FIR_DESIGN_INT_BRANCH_2_1_LAB2]; \n');
+write_coeff(file_ID, 'b_FIR_int_2_0_HP', b_FIR_HP_int(1:MM:end), length(b_FIR_HP_int(1:MM:end)));
+write_coeff(file_ID, 'b_FIR_int_2_1_HP', b_FIR_HP_int(2:MM:end), length(b_FIR_HP_int(2:MM:end)));
+
+fclose(file_ID);
 
 

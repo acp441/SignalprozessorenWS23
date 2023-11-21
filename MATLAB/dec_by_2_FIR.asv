@@ -26,7 +26,7 @@ delta_stop_dB = db(delta_stop); % Welligkeit im Stopband in dB (Header-File)
 % high-pass                      fstop fpass  pass stop rip_pass rip_stop 
 [N_FIR_HP, fo, mo, w] = firpmord( [fstop fpass], [0 1], [delta_pass delta_stop], Fs_in );
 
-% Grade Anzahl an Koeffizienten erzwingen
+% Ordnung erhöhen, um wirklich die geforderte Sperrdämpfung zu erreichen und grade Anzahl an Koeffizienten erzwingen 
 if rem(N_FIR_HP,2) ==  1 
     N_FIR_HP = N_FIR_HP + 1; 
 end

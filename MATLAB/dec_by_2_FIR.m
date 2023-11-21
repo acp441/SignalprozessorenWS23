@@ -26,14 +26,12 @@ delta_stop_dB = db(delta_stop); % Welligkeit im Stopband in dB (Header-File)
 % high-pass                      fstop fpass  pass stop rip_pass rip_stop 
 [N_FIR_HP, fo, mo, w] = firpmord( [fstop fpass], [0 1], [delta_pass delta_stop], Fs_in );
 
-% Grade Anzahl an Koeffizienten erzwingen
-if rem(N_FIR_HP,2) ==  1 
-    N_FIR_HP = N_FIR_HP + 1; 
+% Ordnung erhöhen, um wirklich die geforderte Sperrdämpfung zu erreichen und ...
+% gerade Anzahl an Koeffizienten erzwingen 
+N_FIR_HP_DEC = N_FIR_HP + 1;
+if rem(N_FIR_HP_DEC, 2) ==  1 
+    N_FIR_HP_DEC = N_FIR_HP_DEC + 1; 
 end
-
-% Ergänze zwei weitere Koeffizienten um wirklich -40 dB Sperrdämpfung zu
-% erreichen
-N_FIR_HP_DEC = N_FIR_HP+2;
 
 % FIR-Filterdesign...
 b_FIR_HP_dec = firpm(N_FIR_HP_DEC, fo, mo, w);
@@ -89,6 +87,7 @@ grid
 % Ausgabe der Anzahl an Filterkoeffizienten des entworfenen Filters
 fprintf('\n Order of filter, N_FIR_HP_DEC = %d\n\n', N_FIR_HP_DEC);
 
+pause 
 % Exportieren des entworfenen Filters in Form eines Headerfiles
 %---------------------------------------------------------------------------
 % write to file !
@@ -117,3 +116,37 @@ write_coeff(file_ID, 'b_FIR_dec_HP', b_FIR_HP_dec, length(b_FIR_HP_dec));
 
 fclose(file_ID);
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Exportieren des entworfenen Filters in Form eines Headerfiles
+%---------------------------------------------------------------------------
+% write to file !
+% create header file and info
+fprintf('coefficients are written to file ==> ');
+filename = 'dec_by_2_FIR_PP_decomp.h';
+fprintf(filename);
+fprintf('\n\n');
+
+file_ID = fopen(filename, 'w');		% generate include-file
+fprintf(file_ID, '//------------------------------------------- \n');
+fprintf(file_ID, '// designed with -- dec_by_2_FIR.m -- \n');
+fprintf(file_ID, ['// ',date,'\n'] );
+fprintf(file_ID, '// Fs = %6.2f\n', Fs_in );
+fprintf(file_ID, '// fstop = %6.2f\n', fstop);
+fprintf(file_ID, '// fpass = %6.2f\n', fpass);
+fprintf(file_ID, '// delta_pass = %6.2f\n', delta_pass);
+fprintf(file_ID, '// delta_stop_dB = %6.2f\n', delta_stop_dB);
+fprintf(file_ID, '// N_FIR = %d\n',  length(b_FIR_HP_dec(1:MM:end))); %N_FIR_HP_DEC
+fprintf(file_ID, '// N_FIR = %d\n',  length(b_FIR_HP_dec(2:MM:end))); %N_FIR_HP_DEC
+fprintf(file_ID, '//------------------------------------------- \n');
+
+% fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_DEC_BRANCH_2_0_LAB2 %d\n', length(b_FIR_dec_HP)); % Ist hier nicht ein Fehler???
+fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_DEC_BRANCH_2_0_LAB2 %d\n', length(b_FIR_HP_dec(1:MM:end))); % Korrigierte Zeile
+fprintf(file_ID, '#define N_DELAYS_FIR_DESIGN_DEC_BRANCH_2_1_LAB2 %d\n', length(b_FIR_HP_dec(2:MM:end))); % Korrigierte Zeile
+fprintf(file_ID, 'short H_filt_FIR_design_dec_2_0_lab2[N_DELAYS_FIR_DESIGN_DEC_BRANCH_2_0_LAB2]; \n');
+fprintf(file_ID, 'short H_filt_FIR_design_dec_2_1_lab2[N_DELAYS_FIR_DESIGN_DEC_BRANCH_2_1_LAB2]; \n');
+write_coeff(file_ID, 'b_FIR_dec_2_0_HP', b_FIR_HP_dec(1:MM:end), length(b_FIR_HP_dec(1:MM:end)));
+write_coeff(file_ID, 'b_FIR_dec_2_1_HP', b_FIR_HP_dec(2:MM:end), length(b_FIR_HP_dec(2:MM:end)));
+
+fclose(file_ID);

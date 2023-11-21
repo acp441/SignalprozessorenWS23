@@ -1,14 +1,14 @@
 //------------------------------------------- 
 // designed with -- int_by_2_FIR.m -- 
-// 14-Nov-2023
+// 21-Nov-2023
 // Fs = 100000.00
 // fstop = 12500.00
 // fpass = 13030.00
 // delta_pass =   0.01
 // delta_stop_dB = -40.00
-// N_FIR = 368
+// N_FIR = 370
 //------------------------------------------- 
-#define N_DELAYS_FIR_DESIGN_INT_LAB2 368
+#define N_DELAYS_FIR_DESIGN_INT_LAB2 370
 short H_filt_FIR_design_int_lab2[N_DELAYS_FIR_DESIGN_INT_LAB2]; 
 short b_FIR_int_HP[371]={
     111,    -84,    -67,    -53,    -35,    -14,
