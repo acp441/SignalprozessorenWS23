@@ -1,0 +1,207 @@
+/**********************************************************************/
+/*                                                                    */
+/*  TMS320C6747 Code Composer Studio GEL File                         */
+/*                                                                    */
+/*  Company : D.SignT GmbH & Co. KG                                   */
+/*  Author  : Adolf Klemenz                                           */
+/*  Revision: 1.0                                                     */
+/*  Date    : 2018-02-08                                              */
+/*  Target  : TMS320C6747                                             */
+/*  Debugger: CCS                                                     */
+/*                                                                    */
+/*  History : 1.0 initial release 2018-02-08 by AK                    */
+/*                                                                    */
+/*  Details : This GEL file is required to load programs via the Code */
+/*            Composer Studio Debugger. It will disable interrupts    */
+/*            and EDMA transfers and invalidate the caches.           */
+/*            If a program is halted during a debug session,          */
+/*            interrupts and EDMA transfers may still be active and   */
+/*            continue while the program is restarted, reloaded or if */
+/*            another program is loaded to the target.                */
+/*            This GEL file defines functions which stop interrupts   */
+/*            and EDMA transfers prior to any CCS restart, reload,    */
+/*            and load program operations.                            */
+/*                                                                    */
+/**********************************************************************/
+
+
+/**********************************************************************/
+/*                                                                    */
+/*  Chip Registers                                                    */
+/*                                                                    */
+/**********************************************************************/
+/* Syscfg Registers */
+#define SYS_BASE        0x01C14000
+#define KICK0R          *(unsigned int*)(SYS_BASE + 0x038)
+#define KICK1R          *(unsigned int*)(SYS_BASE + 0x03c)
+#define IENCLR          *(unsigned int*)(SYS_BASE + 0x0EC)
+
+/* Interrupt Controller Registers */
+#define INT_BASE        0x01800000
+#define EVTCLR0         *(unsigned int*)(INT_BASE + 0x40)
+#define EVTCLR1         *(unsigned int*)(INT_BASE + 0x44)
+#define EVTCLR2         *(unsigned int*)(INT_BASE + 0x48)
+#define EVTCLR3         *(unsigned int*)(INT_BASE + 0x4C)
+#define INTXCLR         *(unsigned int*)(INT_BASE + 0x184)
+
+/* EDMA Registers */
+#define EDMA_3CC_IECR   *(unsigned int*)(0x01c01058)
+#define EDMA_3CC_EECR   *(unsigned int*)(0x01c01028)
+#define EDMA_3CC_ICR    *(unsigned int*)(0x01c01070)
+#define EDMA_3CC_ECR    *(unsigned int*)(0x01c01008)
+
+/* McASP Registers */
+#define MCASP0_GLBCTL   *(unsigned int*)(0x01D00044)
+#define MCASP1_GLBCTL   *(unsigned int*)(0x01D04044)
+#define MCASP2_GLBCTL   *(unsigned int*)(0x01D08044)
+#define MCASP0_RSTAT    *(unsigned int*)(0x01D00080)
+#define MCASP1_RSTAT    *(unsigned int*)(0x01D04080)
+#define MCASP2_RSTAT    *(unsigned int*)(0x01D08080)
+#define MCASP0_XSTAT    *(unsigned int*)(0x01D000C0)
+#define MCASP1_XSTAT    *(unsigned int*)(0x01D040C0)
+#define MCASP2_XSTAT    *(unsigned int*)(0x01D080C0)
+
+/* Cache Control Registers */
+#define L1PCFG          *(unsigned int*)(0x01840020)
+#define L1DCFG          *(unsigned int*)(0x01840040)
+#define L1PINV          *(unsigned int*)(0x01845028)
+#define L1DINV          *(unsigned int*)(0x01845048)
+#define L2INV           *(unsigned int*)(0x01845008)
+
+/* USB0 Registers */
+#define USB0_CTRLR      *(unsigned int*)(0x01E00004)
+
+/* PRU Control Registers */
+#define PRU0_CTRL       *(unsigned int*)(0x01C37000)
+#define PRU1_CTRL       *(unsigned int*)(0x01C37800)
+
+menuitem "TMS320C6747";
+
+/**********************************************************************/
+/*                                                                    */
+/*  USB_Reset() - reset the USB0 device to properly terminate any     */
+/*                USB session started by a program                    */
+/*                                                                    */
+/**********************************************************************/
+hotmenu USB_Reset()
+{
+    USB0_CTRLR |= 1;
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  Disable_INT() - clear all pending Interrupts                      */
+/*                                                                    */
+/**********************************************************************/
+hotmenu Disable_INT()
+{
+    /* clear CPU interrupts */
+	IER = 0;
+	ICR = 0xFFFF;
+
+    /* unlock SYSCFG */
+    KICK0R = 0x83e70b13;
+    KICK1R = 0x95a4f1e0;
+
+    /* clear and disable address/protection fault interrupts */
+    IENCLR = 3;
+
+    /* clear pending interrupt events and interrupt error flag */
+    EVTCLR0 = 0xFFFFFFFF;
+    EVTCLR1 = 0xFFFFFFFF;
+    EVTCLR2 = 0xFFFFFFFF;
+    EVTCLR3 = 0xFFFFFFFF;
+    INTXCLR = 1;
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  Disable_EDMA() - stop all pending DMA actions                     */
+/*                                                                    */
+/**********************************************************************/
+hotmenu Disable_EDMA()
+{
+    EDMA_3CC_IECR   = 0xffffffff;   // IER  - Disable low interrupts
+    EDMA_3CC_EECR   = 0xffffffff;   // EER  - Disable low events
+    EDMA_3CC_ICR    = 0xffffffff;   // ICR  - Clear low interrupts
+    EDMA_3CC_ECR    = 0xffffffff;   // ICRH - Clear low events
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  McASP_Reset() - reset all McASP devices                           */
+/*                                                                    */
+/**********************************************************************/
+hotmenu McASP_Reset()
+{
+    // reset
+    MCASP0_GLBCTL = 0;
+    MCASP1_GLBCTL = 0;
+    MCASP2_GLBCTL = 0;
+
+    // clear error flags
+    MCASP0_RSTAT = 0x1F7;
+    MCASP1_RSTAT = 0x1F7;
+    MCASP2_RSTAT = 0x1F7;
+    MCASP0_XSTAT = 0x1F7;
+    MCASP1_XSTAT = 0x1F7;
+    MCASP2_XSTAT = 0x1F7;
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  PRU Reset                                                         */
+/*                                                                    */
+/**********************************************************************/
+hotmenu PRU_Reset()
+{
+    PRU0_CTRL = 0;
+    PRU1_CTRL = 0;
+}
+
+
+/**********************************************************************/
+/*                                                                    */
+/*  Invalidate_Cache()                                                */
+/*                                                                    */
+/**********************************************************************/
+hotmenu Invalidate_Cache()
+{
+    L2INV  = 1;
+    while (L2INV & 1) {;}
+    L1PINV = 1;
+    while (L1PINV & 1) {;}
+    L1DINV = 1;
+    while (L1DINV & 1) {;}
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  OnPreFileLoaded() - called on "Load Program"                      */
+/*                                                                    */
+/**********************************************************************/
+OnPreFileLoaded()
+{
+    GEL_Reset();
+    Disable_EDMA();
+    Disable_INT();
+    McASP_Reset();
+    USB_Reset();
+    PRU_Reset();
+    Invalidate_Cache();
+}
+
+/**********************************************************************/
+/*                                                                    */
+/*  OnRestart() - called on "Debug->Restart"                          */
+/*                                                                    */
+/**********************************************************************/
+OnRestart()
+{
+    Disable_EDMA();
+    Disable_INT();
+    Invalidate_Cache();
+    McASP_Reset();
+    USB_Reset();
+}
+

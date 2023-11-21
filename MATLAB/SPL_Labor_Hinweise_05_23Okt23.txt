@@ -1,0 +1,19 @@
+Laborvorbereitung: MATLAB Code 
+
+-----------------------------------------------
+
+Bitte auf D:\TI_WORK5\ (... und nicht auf dem USB Stick, nicht in ZIP Datei, nicht auf Desktop arbeiten)
+
+Fehler, die im Labor oft gemacht werden:
+========================================
+
+Header-Datei (Koeffizienten) liegt nicht im TI-DIR
+Exclude from build (FIR-C und FIR ASM-Routine) gleichzeitig
+2 x Filtern erfordert 2 separate Delay-Felder (aber nur 1 x Koeffs)
+
+Zur Messtechnik:
+TI UNIDAQ2-Board Analoges TP-Filter am Ausgang fg = 25 kHz: 
+--> wenn Fs = 12.5 kHz --> erste Wiederholung bei 25 kHz
+--> KEMO Filter nachschalten, wenn Fs = 12.5 kHz, sonst Signal verrauscht
+
+"Das wichtigste Gerät auf dem Tisch ist das OSZI"
