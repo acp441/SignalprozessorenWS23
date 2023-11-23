@@ -77,6 +77,7 @@ PRU_addaOvly PRU_addaRegs = (PRU_addaOvly) (PRU0_DRAM + PRU_NUM * (PRU1_DRAM-PRU
 ***********************************************************************/
 
 // Put your additional global variables here ...
+volatile int16_t outData[NUM_POLY_BRANCHES];
 
 // prototype for our filter
 short FIR_filter_sc(    short FIR_delays[],         // delay array
@@ -137,23 +138,15 @@ __interrupt void adcInt (void)
 	}
 
 // Put your ADC DSP code here ...
-    /************************* autor: Kroeger date: 21.11.2023 ***********************************/
-    static short poly_switch = 0;
 
-    // Switch now starts at poly branch zero an then starts to rotate clockwise 
-    switch (poly_switch) {
-    case 0:
-        outData[0] = FIR_filter_sc(H_filt_FIR_design_int_2_0_lab2, b_FIR_int_2_0_HP, N_DELAYS_FIR_DESIGN_INT_BRANCH_2_1_LAB2, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection 
-        break;
-    case 1:
-        outData[1] = FIR_filter_sc(H_filt_FIR_design_int_2_1_lab2, b_FIR_int_2_1_HP, N_DELAYS_FIR_DESIGN_INT_BRANCH_2_0_LAB2, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection 
-        break;
-    default:
-        break;
-    }
-    poly_switch++;
-    poly_switch %= NUM_POLY_BRANCHES;
-    /********************************************************************************************/
+    static char _switch = 0;
+    /*if (_switch) {
+        sData[0] = -sData[0];
+        _switch = 0;
+        }
+    else {
+        _switch = 1;
+    }*/
 }
 
 /*******************************************************************//**
@@ -165,16 +158,33 @@ __interrupt void dacInt (void)
 {
 
     // Put your DAC DSP code here ...
-    /************************* autor: Kroeger date: 21.11.2023 ***********************************/
+    static short poly_switch = 0;
+    static char _switch = 0;
+
+    // Switch now starts at poly branch zero an then starts to rotate clockwise 
+    switch (poly_switch) {
+    case 0:
+        outData[0] = FIR_filter_sc(H_filt_FIR_design_int_2_0_lab2, b_FIR_int_2_0_HP, N_DELAYS_FIR_DESIGN_INT_BRANCH_2_1_LAB2, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection
+        break;
+    case 1:
+        outData[0] = FIR_filter_sc(H_filt_FIR_design_int_2_1_lab2, b_FIR_int_2_1_HP, N_DELAYS_FIR_DESIGN_INT_BRANCH_2_0_LAB2, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection
+        break;
+    default:
+        break;
+    }
+    poly_switch++;
+    poly_switch %= NUM_POLY_BRANCHES;
+
     // Invertierung jedes zweiten Samples zur Transformation in den Tiefpassbereich
-    if (_switch) {
-        sData[0] = -sData[0];
+    /*if (_switch) {
+        outData[0] = -outData[0];
         _switch = 0;
     }
     else {
         _switch = 1;
-    }
+    }*/
     /********************************************************************************************/
+
 
 
     /*******************************************************************
@@ -182,7 +192,7 @@ __interrupt void dacInt (void)
     *******************************************************************/
     for (idx=0; idx<8; idx++)
 	{
-		PRU_addaRegs->dac[idx] = sData[idx];
+		PRU_addaRegs->dac[idx] = outData[0];
 	}
 }
 
