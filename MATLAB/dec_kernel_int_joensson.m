@@ -52,7 +52,13 @@ pause % --------------................-------------
 % add here the design of the decimation/interpolation filter and of the KERNEL filter
 clear fo mo w;
 % define frequencies for the interpolation and decimation filter
-Mmin = 5; % muss bestimmt werden
+
+% Bestimmung von Mmin
+polynom = [fstop^2-fpass^2, (fpass + fstop)^2, 2*Fs*(fpass + fstop), -(Fs^2)]; 
+Mmin = roots(polynom);
+% für Mmin wurde 3.1553 -> 3 bestimmt
+
+%%
 fstop_dec_int = Fs / MMin - fstop; 
 fpass_dec_int = fpass; 
 [N_FIR_Dec_Int,fo,mo,w] = firpmord( [fpass_dec_int fstop_dec_int], [1 0], [delta_pass delta_stop], Fs );
