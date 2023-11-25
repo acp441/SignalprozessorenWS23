@@ -150,3 +150,27 @@ write_coeff(file_ID, 'b_FIR_dec_2_0_HP', b_FIR_HP_dec(1:MM:end), length(b_FIR_HP
 write_coeff(file_ID, 'b_FIR_dec_2_1_HP', b_FIR_HP_dec(2:MM:end), length(b_FIR_HP_dec(2:MM:end)));
 
 fclose(file_ID);
+
+%% Chirp Signal
+close all
+Fs = 50e3;
+t_seconds = 1;
+y = (1/Fs:1/Fs:1);
+fstart = 12.5e3;
+fstop = 25e3;
+y = chirp(y, fstart, t_seconds, fstop);
+
+%soundsc(y, 48e3);
+
+s = spectrogram(y, 256, 0, 256);
+figure('Name', "Spektrogramm des 'Fledermaussignals'");
+spectrogram(y, 256, 128,256, Fs, 'yaxis');
+
+% Modulation ins Basisband
+y = y(1:2:end);
+y(2:2:end) = -y(2:2:end);
+soundsc(y, 48e3);
+figure('Name', "Spektrogramm des modulierten 'Fledermaussignals'");
+spectrogram(y, 256, 128, 256, Fs/2, 'yaxis');
+
+

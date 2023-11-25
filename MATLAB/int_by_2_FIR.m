@@ -150,4 +150,25 @@ write_coeff(file_ID, 'b_FIR_int_2_1_HP', b_FIR_HP_int(2:MM:end), length(b_FIR_HP
 
 fclose(file_ID);
 
+%% Chirp Signal
 
+%% Chirp Signal
+close all
+Fs = 25e3;
+t_seconds = 1;
+y = (1/Fs:1/Fs:1);
+fstart = 12.5e3;
+fstop = 25e3;
+y = chirp(y, fstart, t_seconds, fstop);
+
+figure('Name', "Spektrogramm des 'Fledermaussignals'");
+spectrogram(y, 256, 128,256, Fs, 'yaxis');
+soundsc(y, 48e3);
+
+
+y_int(1:2:2*length(y)) = y;
+y_int = filter(b_FIR_HP_int, 1, y_int);
+
+%soundsc(y_int, 48e3);
+figure('Name', "Spektrogramm des interpolierten 'Fledermaussignals'");
+spectrogram(y_int, 256, 128,256, 2*Fs, 'yaxis');
