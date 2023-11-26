@@ -5,15 +5,15 @@ clear
 close all
 help int_by_2_FIR.m
 
-Fs1 = 50000;
+Fs1 = 25000;
 Fs2 = 2*Fs1;
 freq = (1:999)/2000;
 MM = 2;
 
 %% Remez equiripple
 % Vorgaben
-fpass = Fs1/4 + 530;
-fstop = Fs1/4; % has to be determined from the parameters ...
+fpass = Fs2/4 + 530;
+fstop = Fs2/4; % has to be determined from the parameters ...
                      % above such that when down- or up-sampling ...
                      % is applied NO aliasing occurs
                      % Die Frequenz fstop sollte sich an B/2 des Eingangssignals orientieren
@@ -150,7 +150,6 @@ write_coeff(file_ID, 'b_FIR_int_2_1_HP', b_FIR_HP_int(2:MM:end), length(b_FIR_HP
 
 fclose(file_ID);
 
-%% Chirp Signal
 
 %% Chirp Signal
 close all
@@ -163,12 +162,12 @@ y = chirp(y, fstart, t_seconds, fstop);
 
 figure('Name', "Spektrogramm des 'Fledermaussignals'");
 spectrogram(y, 256, 128,256, Fs, 'yaxis');
-soundsc(y, 48e3);
+%soundsc(y, 48e3);
 
 
 y_int(1:2:2*length(y)) = y;
 y_int = filter(b_FIR_HP_int, 1, y_int);
 
-%soundsc(y_int, 48e3);
+soundsc(y_int, 48e3);
 figure('Name', "Spektrogramm des interpolierten 'Fledermaussignals'");
 spectrogram(y_int, 256, 128,256, 2*Fs, 'yaxis');
