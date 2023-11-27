@@ -45,8 +45,7 @@ fprintf('\n N_FIR=%d, "normal" implementation\n\n', N_FIR);
 
 figure(1);
 plot(freq*Fs,db(hz)),grid
-title('Amplitude response of desired FIR filter in dB'),
-xlabel('Frequency in Hz, Nyquist range');
+xlabel('Frequency in Hz');
 ylabel('|H| in dB');
 hold on
 
@@ -78,14 +77,12 @@ fpass_dec_int = fpass;
 b_FIR_Dec_Int = firpm(N_FIR_Dec_Int, fo, mo, w); % FIR-Filter-Design
 hz = freqz(b_FIR_Dec_Int,1, 2*pi*freq); % Amplitudengang berechnen
 figure(1); 
-plot(freq*Fs,db(hz)),grid, title('Amplitudengang des Dez/Int-Filters in dB'),
-xlabel('Frequenz in Hz, Nyquist-Bereich'), ylabel('|H| in dB');
-legend("FIR Filter", "Dez/Int-Filter");
+plot(freq*Fs,db(hz)),grid, ylabel('|H| in dB');
 
 fprintf("fpass vom Dezimationsfilter ist %f.\n", fpass_dec_int);
 fprintf("fstop vom Dezimationsfilter ist %f.\n", fstop_dec_int);
-fprintf("Die Minimale Stop-Band Dämpfung ist %f.\n \n", delta_stop_dB);
-
+fprintf("Die minimale Stop-Band Dämpfung ist %f dB.\n", delta_stop_dB);
+fprintf("Die Dez-/Int-Filter haben die Ordnung %d. \n\n", N_FIR_Dec_Int);
 
 
 % Polyphasenzerlegung des Dezimations- / Interpolationsfilters
@@ -107,23 +104,22 @@ fpass_Kernel = fpass;
 fstop_Kernel = fstop;
 fprintf("fpass_Kernel ist %f.\n", fpass_Kernel);
 fprintf("fstop_Kernel ist %f.\n", fstop_Kernel);
-fprintf("Die Minimale Stop-Band Dämpfung ist %f.\n \n", delta_stop_dB);
+fprintf("Die minimale Stop-Band Dämpfung ist %f dB.\n", delta_stop_dB);
 
 %delta_pass/3, weil sich die Ripples der drei Filter überlagern
 [N_Kernel,fo,mo,w] = firpmord( [fpass_Kernel fstop_Kernel], [1 0], ...
     [delta_pass/3 delta_stop], Fs_Kernel);
-b_FIR_Dec_Int = firpm(N_Kernel, fo, mo, w); % FIR-Filter-Design
+N_Kernel = N_Kernel + 2;
+b_Kernel = firpm(N_Kernel, fo, mo, w); % FIR-Filter-Design
 
-fprintf("Das Kernel-Filter hat die Ordnung N_Kernel = %d.\n", N_Kernel);
+fprintf("Das Kernel-Filter hat die Ordnung N_Kernel = %d.\n \n", N_Kernel);
 
-hz = freqz(b_FIR_Dec_Int,1, 2*pi*freq);
+hz = freqz(b_Kernel,1, Mmin*2*pi*freq);
 plot(freq*Fs,db(hz));
+legend("FIR Filter", "Dez/Int-Filter", "Kernel-Filter");
 
 % this is provided in order to let the script end correctly, remove later
 N_FIR_kernel_MM = N_Kernel;
-
-
-
 
 
 
@@ -157,7 +153,7 @@ file_ID = fopen(filename, 'w');		% generate include-file
 fprintf(file_ID, '//------------------------------------------- \n');
 fprintf(file_ID, '// designed with -- dec_kernel_int.m -- \n', Fs );
 fprintf(file_ID, '// Fs = %6.2f\n', Fs );
-fprintf(file_ID, '// MMmin = %6.2f\n', MMmin );
+fprintf(file_ID, '// MMmin = %6.2f\n', Mmin );
 fprintf(file_ID, '// fstop = %6.2f\n', fstop);
 fprintf(file_ID, '// fpass = %6.2f\n', fpass);
 fprintf(file_ID, '// delta_pass = %6.2f\n', delta_pass);
@@ -166,4 +162,21 @@ fprintf(file_ID, '// N_FIR = %d, instead two stages with N_FIR_Dec_Int = %d, N_F
     N_FIR, N_FIR_Dec_Int, N_FIR_kernel_MM);
 fprintf(file_ID, '//------------------------------------------- \n');
 
+fprintf(file_ID, '#define N_delays_FIR_Dec_Int %d\n', length(b_FIR_Dec_Int));
+fprintf(file_ID, '#define N_delays_Kernel %d\n', length(b_Kernel));
+
+
+% DEC-INT-Polyphasen
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 0\n');
+fprintf(file_ID, 'short H_filt_poly_40_Dec_Int[N_delays_FIR_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_40_Dec_Int', b_poly_40_Dec_Int, length(b_poly_40_Dec_Int));
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 1\n');
+fprintf(file_ID, 'short H_filt_poly_41_Dec_Int[N_delays_poly_41_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_41_Dec_Int', b_poly_41_Dec_Int, length(b_poly_41_Dec_Int));
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 2\n');
+fprintf(file_ID, 'short H_filt_poly_42_Dec_Int[N_delays_poly_42_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_41_Dec_Int', b_poly_41_Dec_Int, length(b_poly_41_Dec_Int));
+fprintf(file_ID, '\n// KERNEL FILTER\n');
+fprintf(file_ID, 'short H_filt_Kernel[N_delays_Kernel]; \n');
+write_coeff(file_ID, 'b_Kernel', b_Kernel, length(b_Kernel));
 fclose(file_ID);

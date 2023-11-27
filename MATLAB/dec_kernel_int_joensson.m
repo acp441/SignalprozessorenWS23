@@ -117,14 +117,9 @@ fprintf("Das Kernel-Filter hat die Ordnung N_Kernel = %d.\n \n", N_Kernel);
 hz = freqz(b_Kernel,1, Mmin*2*pi*freq);
 plot(freq*Fs,db(hz));
 legend("FIR Filter", "Dez/Int-Filter", "Kernel-Filter");
-hold off;
 
 % this is provided in order to let the script end correctly, remove later
 N_FIR_kernel_MM = N_Kernel;
-
-
-% Zusammenführen von Dec/Int und Kernel-Filter
-% b_dec_kernel_int = b_FIR_Dec_Int .* b_Kernel;
 
 
 
@@ -167,4 +162,28 @@ fprintf(file_ID, '// N_FIR = %d, instead two stages with N_FIR_Dec_Int = %d, N_F
     N_FIR, N_FIR_Dec_Int, N_FIR_kernel_MM);
 fprintf(file_ID, '//------------------------------------------- \n');
 
+fprintf(file_ID, '#define N_delays_poly_40_Dec_Int %d\n', length(b_poly_40_Dec_Int));
+fprintf(file_ID, '#define N_delays_poly_41_Dec_Int %d\n', length(b_poly_41_Dec_Int));
+fprintf(file_ID, '#define N_delays_poly_42_Dec_Int %d\n', length(b_poly_42_Dec_Int));
+fprintf(file_ID, '#define N_delays_poly_43_Dec_Int %d\n', length(b_poly_43_Dec_Int));
+fprintf(file_ID, '#define N_delays_Kernel %d\n', length(b_Kernel));
+
+% DEC-INT-Polyphasen
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 0\n');
+fprintf(file_ID, 'short H_filt_poly_40_Dec_Int[N_delays_poly_40_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_40_Dec_Int', b_poly_40_Dec_Int, length(b_poly_40_Dec_Int));
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 1\n');
+fprintf(file_ID, 'short H_filt_poly_41_Dec_Int[N_delays_poly_41_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_41_Dec_Int', b_poly_41_Dec_Int, length(b_poly_41_Dec_Int));
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 2\n');
+fprintf(file_ID, 'short H_filt_poly_42_Dec_Int[N_delays_poly_42_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_42_Dec_Int', b_poly_42_Dec_Int, length(b_poly_42_Dec_Int));
+fprintf(file_ID, '\n// DEC/INT POLYPHASE 3\n');
+fprintf(file_ID, 'short H_filt_poly_43_Dec_Int[N_delays_poly_43_Dec_Int]; \n');
+write_coeff(file_ID, 'b_poly_43_Dec_Int', b_poly_43_Dec_Int, length(b_poly_43_Dec_Int));
+
+% Kernel-Filter
+fprintf(file_ID, '\n// KERNEL FILTER\n');
+fprintf(file_ID, 'short H_filt_Kernel[N_delays_Kernel]; \n');
+write_coeff(file_ID, 'b_Kernel', b_Kernel, length(b_Kernel));
 fclose(file_ID);
