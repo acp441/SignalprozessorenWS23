@@ -1,0 +1,31 @@
+% dec_kern_int_M_5_FIR.m
+%
+% FIR Filterentwurf fuer den Dezimator von Labor 2
+clear
+close all
+help dec_by_2_FIR.m
+
+Fs_in = 50000;
+freq = (1:999)/2000;
+MM = 2;
+
+%% Remez equiripple
+% Entwurfsparameter
+fpass = Fs_in/4 + 530;
+fstop = Fs_in/4 - 530; % has to be determined from the parameters ...
+                       % above such that when down- or up-sampling ...
+                       % is applied NO aliasing occurs
+                       % Die Frequenz fstop sollte sich an B/2 des
+                       % Eingangssignals orientieren
+delta_pass = 0.01;
+delta_stop = 0.01;
+delta_stop_dB = db(delta_stop);
+
+% Abschaetzung der Filterordnung
+% high-pass                      fstop fpass  pass stop rip_pass rip_stop 
+[N_FIR_HP, fo, mo, w] = firpmord( [fstop fpass], [0 1], [delta_pass delta_stop], Fs_in );
+
+% Grade Anzahl an Koeffizienten erzwingen
+if rem(N_FIR_HP,2) ==  1 
+    N_FIR_HP = N_FIR_HP + 1; 
+end
