@@ -60,7 +60,7 @@ Mmin = roots(polynom);
 % Verwende 4 als am nächsten liegende Potenz von 2
 Mmin = 4;
 
-
+% 
 fstop_dec_int = Fs / MMin - fstop; 
 fpass_dec_int = fpass; 
 [N_FIR_Dec_Int,fo,mo,w] = firpmord( [fpass_dec_int fstop_dec_int], [1 0], [delta_pass delta_stop], Fs );
