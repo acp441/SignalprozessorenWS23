@@ -43,11 +43,19 @@ hz = freqz(b_FIR,1, 2*pi*freq);
 
 fprintf('\n N_FIR=%d, "normal" implementation\n\n', N_FIR);
 
+figure(1);
 plot(freq*Fs,db(hz)),grid
 title('Amplitude response of desired FIR filter in dB'),
 xlabel('Frequency in Hz, Nyquist range');
 ylabel('|H| in dB');
-pause % --------------................-------------
+hold on
+
+
+
+
+
+% --- Dezimations- / Interpolationsfilter ---
+
 
 % add here the design of the decimation/interpolation filter and of the KERNEL filter
 clear fo mo w;
@@ -56,33 +64,68 @@ clear fo mo w;
 % Bestimmung von Mmin
 polynom = [fstop^2-fpass^2, -(fpass + fstop)^2, 2*Fs*(fpass + fstop), -(Fs^2)]; 
 Mmin = roots(polynom);
+fprintf("Mmin hat den Wert %f.\n", Mmin(3));
 % für Mmin wurde 5.33 -> 5 bestimmt
 % Verwende 4 als am nächsten liegende Potenz von 2
 Mmin = 4;
 
-% 
-fstop_dec_int = Fs / MMin - fstop; 
+
+fstop_dec_int = Fs / Mmin - fstop; 
 fpass_dec_int = fpass; 
-[N_FIR_Dec_Int,fo,mo,w] = firpmord( [fpass_dec_int fstop_dec_int], [1 0], [delta_pass delta_stop], Fs );
+% delta_pass / 3 weil sich die Ripples der 3 Filter überlagern
+[N_FIR_Dec_Int,fo,mo,w] = firpmord( [fpass_dec_int fstop_dec_int], [1 0], [delta_pass/3 delta_stop], Fs );
 
 b_FIR_Dec_Int = firpm(N_FIR_Dec_Int, fo, mo, w); % FIR-Filter-Design
 hz = freqz(b_FIR_Dec_Int,1, 2*pi*freq); % Amplitudengang berechnen
-figure("Name", "|H| des Dezimations/Interpolationsfilters"); 
+figure(1); 
 plot(freq*Fs,db(hz)),grid, title('Amplitudengang des Dez/Int-Filters in dB'),
 xlabel('Frequenz in Hz, Nyquist-Bereich'), ylabel('|H| in dB');
+legend("FIR Filter", "Dez/Int-Filter");
+
+fprintf("fpass vom Dezimationsfilter ist %f.\n", fpass_dec_int);
+fprintf("fstop vom Dezimationsfilter ist %f.\n", fstop_dec_int);
+fprintf("Die Minimale Stop-Band Dämpfung ist %f.\n \n", delta_stop_dB);
+
+
 
 % Polyphasenzerlegung des Dezimations- / Interpolationsfilters
-b_poly_20_Dec_Int = b_FIR_Dec_Int(1 : MMin: end);
-b_poly_21_Dec_Int = b_FIR_Dec_Int(1 : MMin: end);
-% ... ggf. weitere Zweige hinzufügen, abhängig von M
+% abhängig von M müssen hier mehr oder weniger Zweige gebildet werden
+b_poly_40_Dec_Int = b_FIR_Dec_Int(1 : Mmin: end);
+b_poly_41_Dec_Int = b_FIR_Dec_Int(2 : Mmin: end);
+b_poly_42_Dec_Int = b_FIR_Dec_Int(3 : Mmin: end);
+b_poly_43_Dec_Int = b_FIR_Dec_Int(4 : Mmin: end);
 
 
 
 
+
+
+% --- Design des Kernel-Filters
+clear fo mo w;
+Fs_Kernel = Fs / Mmin;
+fpass_Kernel = fpass;
+fstop_Kernel = fstop;
+fprintf("fpass_Kernel ist %f.\n", fpass_Kernel);
+fprintf("fstop_Kernel ist %f.\n", fstop_Kernel);
+fprintf("Die Minimale Stop-Band Dämpfung ist %f.\n \n", delta_stop_dB);
+
+%delta_pass/3, weil sich die Ripples der drei Filter überlagern
+[N_Kernel,fo,mo,w] = firpmord( [fpass_Kernel fstop_Kernel], [1 0], ...
+    [delta_pass/3 delta_stop], Fs_Kernel);
+b_FIR_Dec_Int = firpm(N_Kernel, fo, mo, w); % FIR-Filter-Design
+
+fprintf("Das Kernel-Filter hat die Ordnung N_Kernel = %d.\n", N_Kernel);
+
+hz = freqz(b_FIR_Dec_Int,1, 2*pi*freq);
+plot(freq*Fs,db(hz));
 
 % this is provided in order to let the script end correctly, remove later
-MMmin = 0;
-N_FIR_kernel_MM = 0;
+N_FIR_kernel_MM = N_Kernel;
+
+
+
+
+
 
 %---------------------------------------------------------------------------
 % write to file !
