@@ -15,25 +15,29 @@
 #define N_delays_Kernel 117
 
 // DEC/INT POLYPHASE 0
-short H_filt_poly_40_Dec_Int[N_delays_poly_40_Dec_Int]; 
+short H_filt_poly_40_Dec[N_delays_poly_40_Dec]; 
+short H_filt_poly_40_Int[N_delays_poly_40_Int]; 
 short b_poly_40_Dec_Int[5]={
     316,  -1105,   7426,   1970,   -349,};
 
 
 // DEC/INT POLYPHASE 1
-short H_filt_poly_41_Dec_Int[N_delays_poly_41_Dec_Int]; 
+short H_filt_poly_41_Dec[N_delays_poly_41_Dec]; 
+short H_filt_poly_41_Int[N_delays_poly_41_Int]; 
 short b_poly_41_Dec_Int[5]={
      99,   -205,   8431,   -205,     99,};
 
 
 // DEC/INT POLYPHASE 2
-short H_filt_poly_42_Dec_Int[N_delays_poly_42_Dec_Int]; 
+short H_filt_poly_42_Dec[N_delays_poly_42_Dec]; 
+short H_filt_poly_42_Int[N_delays_poly_42_Int]; 
 short b_poly_42_Dec_Int[5]={
    -349,   1970,   7426,  -1105,    316,};
 
 
 // DEC/INT POLYPHASE 3
-short H_filt_poly_43_Dec_Int[N_delays_poly_43_Dec_Int]; 
+short H_filt_poly_43_Dec[N_delays_poly_43_Dec]; 
+short H_filt_poly_43_Int[N_delays_poly_43_Int]; 
 short b_poly_43_Dec_Int[4]={
    -941,   4891,   4891,   -941,};
 
