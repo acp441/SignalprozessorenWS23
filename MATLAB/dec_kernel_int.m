@@ -4,10 +4,10 @@
 %
 % Zuerst wird ein FIR-Tiefpassfilter erstellt, das eine 
 % Stopband-Frequenz von 3350 Hz und eine Passband-Frequenz 
-% von 3350 Hz hat.
+% von 3100 Hz hat.
 %
 % Dieses Filter wird durch ein Multiratenfilter ersetzt. Dazu 
-% folgt eine Dezimation um den Faktor M_min = ??. Das Dezimations-
+% folgt eine Dezimation um den Faktor M_min = 4. Das Dezimations-
 % filter und das Interpolationsfilter haben identische Filter-
 % koeffizienten. Sie werden durch eine Polyphasenzerlegung rea-
 % lisiert. 
