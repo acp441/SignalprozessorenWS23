@@ -101,6 +101,17 @@ short FIR_filter_sc(    short FIR_delays[],         // delay array
                         short shft
     );
 
+
+
+/*
+#define MM 4
+short *p2p_H_polyphase_filter_DEC[MM]
+p2p_H_polyphase_filter_DEC[0] = H_polyphase_filt_0_delays_DEC;
+p2p_H_polyphase_filter_DEC[0] = H_polyphase_filt_0_delays_DEC;
+p2p_H_polyphase_filter_DEC[0] = H_polyphase_filt_0_delays_DEC;
+p2p_H_polyphase_filter_DEC[0] = H_polyphase_filt_0_delays_DEC;
+*/
+
 /***********************************************************************
   end of globals SP Lab
 ***********************************************************************/
