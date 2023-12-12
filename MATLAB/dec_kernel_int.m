@@ -163,6 +163,7 @@ fprintf(file_ID, '// N_FIR = %d, instead two stages with N_FIR_Dec_Int = %d, N_F
     N_FIR, N_FIR_Dec_Int, N_FIR_kernel_MM);
 fprintf(file_ID, '//------------------------------------------- \n');
 
+fprintf(file_ID, '#define NUM_POLY_BRANCHES %d\n', Mmin);
 fprintf(file_ID, '#define N_delays_poly_40_Dec_Int %d\n', length(b_poly_40_Dec_Int));
 fprintf(file_ID, '#define N_delays_poly_41_Dec_Int %d\n', length(b_poly_41_Dec_Int));
 fprintf(file_ID, '#define N_delays_poly_42_Dec_Int %d\n', length(b_poly_42_Dec_Int));
@@ -192,4 +193,31 @@ write_coeff(file_ID, 'b_poly_43_Dec_Int', b_poly_43_Dec_Int, length(b_poly_43_De
 fprintf(file_ID, '\n// KERNEL FILTER\n');
 fprintf(file_ID, 'short H_filt_Kernel[N_delays_Kernel]; \n');
 write_coeff(file_ID, 'b_Kernel', b_Kernel, length(b_Kernel));
+
+fprintf(file_ID, 'p2p_H_polyphase_filt_DEC[NUM_POLY_BRANCHES];\n');
+
+for idx = 0:Mmin-1
+    fprintf(file_ID, 'p2p_H_polyphase_filt_DEC[%d] = H_filt_poly_4%d_Dec;\n', idx, Mmin-1-idx);
+end
+fprintf(file_ID, '\n');
+fprintf(file_ID, 'p2p_H_polyphase_filt_INT[NUM_POLY_BRANCHES];\n');
+
+for idx = 0:Mmin-1
+    idx2 = rem(idx + 1, Mmin);
+    fprintf(file_ID, 'p2p_H_polyphase_filt_INT[%d] = H_filt_poly_4%d_Int;\n', idx, idx2);
+end
+fprintf(file_ID, '\n');
+fprintf(file_ID, 'delays[NUM_POLY_BRANCHES];\n');
+
+for idx = 0:Mmin-1
+    fprintf(file_ID, 'delays[%d] = N_delays_poly_4%d_Dec_Int;\n', idx, Mmin - idx - 1);
+end
+fprintf(file_ID, '\n');
+fprintf(file_ID, 'p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES];\n');
+
+for idx = 0:Mmin-1
+    fprintf(file_ID, 'p2p_b_boly_Dec_Int[%d] = N_delays_poly_4%d_Dec_Int;\n', idx, Mmin - idx - 1);
+end
+
 fclose(file_ID);
+
