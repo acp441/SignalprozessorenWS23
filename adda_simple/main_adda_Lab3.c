@@ -30,6 +30,7 @@
 
 // includes of Lennard and Victor
 #include "dec_kernel_int_WS23.h"
+#include "CircularBuffer.h"
 
 
 
@@ -39,8 +40,7 @@
 ***********************************************************************/
 // defines of Lennard and Victor
 #define NUM_POLY_BRANCHES 4 // Anzahl der Polyphasenkomponenten
-#define K 250 // Verzögerung für den Branching-Filter
-
+// K und BUFFER_SIZE werden in CircularBuffer.c definiert
 
 // default ratio of sample rates
 #define LL 2
@@ -77,7 +77,9 @@ int16_t idx;
 PRU_addaOvly PRU_addaRegs = (PRU_addaOvly) (PRU0_DRAM + PRU_NUM * (PRU1_DRAM-PRU0_DRAM));
 
 short buffer[1000], buffCount = 0;
-
+RingBuffer ringbuf;
+short rbOut = 0;
+volatile short sDataOut[2];
 
 
 /***********************************************************************
@@ -90,8 +92,6 @@ short yDecOut; // Ausgang der aufsummierten PP des Dezimators, geht zum Kernel
 short kernelOut; // Ausgang des Kernel-Filters, geht zum Interpolator
 short yIntOut; // Ausgang des Interpolator, soll zum DAC
 
-short sData_0_k_delayed[K]; // Delays für das Branching Filter
-short b_FIR_leer[K] = {0}; // hier waren wir stehen geblieben ...
 
 // prototype for our filter
 short FIR_filter_sc(    short FIR_delays[],         // delay array
@@ -146,17 +146,18 @@ __interrupt void adcInt (void)
     /*******************************************************************
       read all ADC channels and store in floating point format
     *******************************************************************/
-#define NUM_CHANNELS 1  // number of adc channels we are using
+#define NUM_CHANNELS 2  // number of adc channels we are using
     static short counter = 0;
     for (idx=0; idx<NUM_CHANNELS; idx++)
 	{
-		// sData[idx] = PRU_addaRegs->adc[idx];
-        if(counter == 999){
+		sData[idx] = PRU_addaRegs->adc[idx];
+
+		/* if(counter == 999){
             sData[idx] = 32767;
 
         } else{
             sData[idx] = 0;
-        }
+        }*/
 
 	}
     counter++;
@@ -188,15 +189,20 @@ __interrupt void adcInt (void)
         break;
     }
 
+    sDataOut[0] = yIntOut;
+
     // Branching-Filter
-    sData[1] = yIntOut - sData_0_k_delayed[K];
+    enqueue(&ringbuf, sData[0]);
+    static int branch_wait = 0;
+    if(branch_wait == K){
+        rbOut = dequeue(&ringbuf);
+        sDataOut[1] = yIntOut - rbOut;
+    } else{
+        branch_wait++;
+    }
 
 
-
-
-    FIR_filter_sc(sData_0_k_delayed, b_FIR_leer, K, sData[0], 15);
-
-    buffer[buffCount] = yIntOut;
+    buffer[buffCount] = rbOut; // rbOut
     buffCount++;
     if (buffCount>=1000){
         buffCount=0;
@@ -219,10 +225,10 @@ __interrupt void dacInt (void)
     /*******************************************************************
       write DAC channels 1..8
     *******************************************************************/
-#define NUM_DAC_CHANNELS 1
+#define NUM_DAC_CHANNELS 2
     for (idx=0; idx<NUM_DAC_CHANNELS; idx++)
 	{
-		PRU_addaRegs->dac[idx] = yIntOut;
+		PRU_addaRegs->dac[idx] = sDataOut[idx];
 	}
 }
 
@@ -233,7 +239,7 @@ void main (void)
 {
 // Put your variables to be initialized in main() here ...
 
-   b_FIR_leer[0] = 1;
+   initializeBuffer(&ringbuf);
 
 	/*******************************************************************
 	  locals
