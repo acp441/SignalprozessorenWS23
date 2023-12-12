@@ -39,7 +39,7 @@
   defines
 ***********************************************************************/
 // defines of Lennard and Victor
-#define NUM_POLY_BRANCHES 4 // Anzahl der Polyphasenkomponenten
+// NUM_POLY_BRANCHES wird in dec_kernel_int.h definiert
 // K und BUFFER_SIZE werden in CircularBuffer.c definiert
 
 // default ratio of sample rates
@@ -76,7 +76,6 @@ int16_t idx;
 
 PRU_addaOvly PRU_addaRegs = (PRU_addaOvly) (PRU0_DRAM + PRU_NUM * (PRU1_DRAM-PRU0_DRAM));
 
-short buffer[1000], buffCount = 0;
 RingBuffer ringbuf;
 short rbOut = 0;
 volatile short sDataOut[2];
@@ -87,7 +86,6 @@ volatile short sDataOut[2];
 ***********************************************************************/
 
 // Put your additional global variables here ...
-short decData[NUM_POLY_BRANCHES];   // Output der Polyphasen des Dezimators
 short yDecOut; // Ausgang der aufsummierten PP des Dezimators, geht zum Kernel
 short kernelOut; // Ausgang des Kernel-Filters, geht zum Interpolator
 short yIntOut; // Ausgang des Interpolator, soll zum DAC
@@ -177,49 +175,33 @@ __interrupt void adcInt (void)
 // Put your ADC DSP code here ...
     static short poly_switch = 0;
 
-    switch(poly_switch){
-    case 0:
-        decData[0] = FIR_filter_sc(H_filt_poly_43_Dec, b_poly_43_Dec_Int, N_delays_poly_43_Dec_Int, sData[0], 15);
-        yIntOut = FIR_filter_sc(H_filt_poly_41_Int, b_poly_41_Dec_Int, N_delays_poly_41_Dec_Int, kernelOut, 13);
-        break;
-    case 1:
-        decData[1] = FIR_filter_sc(H_filt_poly_42_Dec, b_poly_42_Dec_Int, N_delays_poly_42_Dec_Int, sData[0], 15);
-        yIntOut = FIR_filter_sc(H_filt_poly_42_Int, b_poly_42_Dec_Int, N_delays_poly_42_Dec_Int, kernelOut, 13);
-        break;
-    case 2:
-        decData[2] = FIR_filter_sc(H_filt_poly_41_Dec, b_poly_41_Dec_Int, N_delays_poly_41_Dec_Int, sData[0], 15);
-        yIntOut = FIR_filter_sc(H_filt_poly_43_Int, b_poly_43_Dec_Int, N_delays_poly_43_Dec_Int, kernelOut, 13);
-        break;
-    case 3:
-        decData[3] = FIR_filter_sc(H_filt_poly_40_Dec, b_poly_40_Dec_Int, N_delays_poly_40_Dec_Int, sData[0], 15);
-        yDecOut = decData[3] + decData[2] + decData[1] + decData[0];
-        kernelOut = FIR_filter_sc(H_filt_Kernel, b_Kernel, N_delays_Kernel, yDecOut, 15);
-        yIntOut = FIR_filter_sc(H_filt_poly_40_Int, b_poly_40_Dec_Int, N_delays_poly_40_Dec_Int, kernelOut, 13);
-        break;
-    default:
-        break;
+    // Zählen der ISRs zur gezielten Auswahl der PP und Delays
+    static int adcCount = 0;  
+
+    // Berechnung einer Polyphase des Dezimators
+    yDecOut += FIR_filter_sc(p2p_H_polyphase_filt_DEC[adcCount], p2p_b_boly_Dec_Int[adcCount], delays[adcCount], sData[0], 15);
+
+    adcCount++;
+    if(adcCount == NUM_POLY_BRANCHES){
+      kernelOut = FIR_filter_sc(H_filt_Kernel, b_Kernel, N_delays_Kernel, yDecOut, 15);
+      adcCount = 0;
+      yDecOut = 0; 
     }
 
-    sDataOut[0] = yIntOut;
+    // Berechnung des in Polyphasen zerlegten Interpolators
+    // muss hinter der Berechnung von kernelOut stehen, sonst bringen wir zusätzliches T ein
+    sDataOut[0] = FIR_filter_sc(p2p_H_polyphase_filt_INT[adcCount], p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES - 2 - adcCount], delays[NUM_POLY_BRANCHES - 2 - adcCount], kernelOut, 13);
 
     // Branching-Filter
     enqueue(&ringbuf, sData[0]);
     static int branch_wait = 0;
     if(branch_wait == K){
         rbOut = dequeue(&ringbuf);
-        sDataOut[1] = yIntOut - rbOut;
+        sDataOut[1] = sDataOut[0] - rbOut; // In sDataOut[1] steht das Ausgangssample des Interpolators
     } else{
         branch_wait++;
     }
 
-
-    buffer[buffCount] = rbOut; // rbOut
-    buffCount++;
-    if (buffCount>=1000){
-        buffCount=0;
-    }
-    poly_switch++;
-    poly_switch %= NUM_POLY_BRANCHES;
 }
 
 /*******************************************************************//**
