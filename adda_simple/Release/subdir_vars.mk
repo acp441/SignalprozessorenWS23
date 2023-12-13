@@ -18,6 +18,7 @@ D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/adda.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c \
 ../main_adda_Lab3.c \
 ../main_adda_Lab3_dec.c \
+../main_adda_Lab_pointers.c \
 ../main_adda_simple_Lab.c \
 ../main_adda_simple_Lab2_dec.c \
 ../main_adda_simple_Lab2_int.c \
@@ -30,6 +31,7 @@ C_DEPS += \
 ./i2c.d \
 ./main_adda_Lab3.d \
 ./main_adda_Lab3_dec.d \
+./main_adda_Lab_pointers.d \
 ./main_adda_simple_Lab.d \
 ./main_adda_simple_Lab2_dec.d \
 ./main_adda_simple_Lab2_int.d \
@@ -43,6 +45,7 @@ OBJS += \
 ./i2c.obj \
 ./main_adda_Lab3.obj \
 ./main_adda_Lab3_dec.obj \
+./main_adda_Lab_pointers.obj \
 ./main_adda_simple_Lab.obj \
 ./main_adda_simple_Lab2_dec.obj \
 ./main_adda_simple_Lab2_int.obj \
@@ -59,6 +62,7 @@ OBJS__QUOTED += \
 "i2c.obj" \
 "main_adda_Lab3.obj" \
 "main_adda_Lab3_dec.obj" \
+"main_adda_Lab_pointers.obj" \
 "main_adda_simple_Lab.obj" \
 "main_adda_simple_Lab2_dec.obj" \
 "main_adda_simple_Lab2_int.obj" \
@@ -71,6 +75,7 @@ C_DEPS__QUOTED += \
 "i2c.d" \
 "main_adda_Lab3.d" \
 "main_adda_Lab3_dec.d" \
+"main_adda_Lab_pointers.d" \
 "main_adda_simple_Lab.d" \
 "main_adda_simple_Lab2_dec.d" \
 "main_adda_simple_Lab2_int.d" \
@@ -86,6 +91,7 @@ C_SRCS__QUOTED += \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c" \
 "../main_adda_Lab3.c" \
 "../main_adda_Lab3_dec.c" \
+"../main_adda_Lab_pointers.c" \
 "../main_adda_simple_Lab.c" \
 "../main_adda_simple_Lab2_dec.c" \
 "../main_adda_simple_Lab2_int.c" \

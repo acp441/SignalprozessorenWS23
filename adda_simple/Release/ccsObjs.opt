@@ -5,6 +5,7 @@
 "./i2c.obj"
 "./main_adda_Lab3.obj"
 "./main_adda_Lab3_dec.obj"
+"./main_adda_Lab_pointers.obj"
 "./main_adda_simple_Lab.obj"
 "./main_adda_simple_Lab2_dec.obj"
 "./main_adda_simple_Lab2_int.obj"

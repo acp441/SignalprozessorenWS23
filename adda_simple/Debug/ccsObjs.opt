@@ -1,7 +1,7 @@
 "./FIR_filter_asm_sc.obj"
 "./adda.obj"
 "./i2c.obj"
-"./main_adda_Lab3.obj"
+"./main_adda_Lab_pointers.obj"
 "./pru.obj"
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/lnk/unidaq2.cmd"
 -llibc.a
