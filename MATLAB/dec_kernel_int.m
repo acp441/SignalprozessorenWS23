@@ -44,21 +44,18 @@ hz = freqz(b_FIR,1, 2*pi*freq);
 fprintf('\n N_FIR=%d, "normal" implementation\n\n', N_FIR);
 
 figure(1);
-plot(freq*Fs,db(hz)),grid
+%plot(freq*Fs,db(hz)),grid
 xlabel('Frequency in Hz');
 ylabel('|H| in dB');
-hold on
-
-
+%f = gcf;
+%exportgraphics(f,'Images/Lab3-H_FIR_normal.eps','ContentType','vector');
+%hold on
 
 
 
 % --- Dezimations- / Interpolationsfilter ---
 
-
-% add here the design of the decimation/interpolation filter and of the KERNEL filter
 clear fo mo w;
-% define frequencies for the interpolation and decimation filter
 
 % Bestimmung von Mmin
 polynom = [fstop^2-fpass^2, -(fpass + fstop)^2, 2*Fs*(fpass + fstop), -(Fs^2)]; 
@@ -67,6 +64,7 @@ fprintf("Mmin hat den Wert %f.\n", Mmin(3));
 % für Mmin wurde 5.33 -> 5 bestimmt
 % Verwende 4 als am nächsten liegende Potenz von 2
 Mmin = 4;
+%Mmin = floor(Mmin(3));
 
 
 fstop_dec_int = Fs / Mmin - fstop; 
@@ -75,14 +73,19 @@ fpass_dec_int = fpass;
 [N_FIR_Dec_Int,fo,mo,w] = firpmord( [fpass_dec_int fstop_dec_int], [1 0], [delta_pass/3 delta_stop], Fs );
 
 b_FIR_Dec_Int = firpm(N_FIR_Dec_Int, fo, mo, w); % FIR-Filter-Design
-hz = freqz(b_FIR_Dec_Int,1, 2*pi*freq); % Amplitudengang berechnen
+hz_DecInt = freqz(b_FIR_Dec_Int,1, 2*pi*freq); % Amplitudengang berechnen
 figure(1); 
-plot(freq*Fs,db(hz)),grid, ylabel('|H| in dB');
+plot(freq*Fs,db(hz_DecInt)),grid, ylabel('|H| in dB'), xlabel('Frequenz in Hz');
+title('Amplitudengang des Dezimations-/Interpolationsfilters')
+%f = gcf;
+%exportgraphics(f,'Images/H_Dec_Int.eps','ContentType','vector');
+
 
 fprintf("fpass vom Dezimationsfilter ist %f.\n", fpass_dec_int);
 fprintf("fstop vom Dezimationsfilter ist %f.\n", fstop_dec_int);
 fprintf("Die minimale Stop-Band Dämpfung ist %f dB.\n", delta_stop_dB);
 fprintf("Die Dez-/Int-Filter haben die Ordnung %d. \n\n", N_FIR_Dec_Int);
+
 
 % Runden auf 16 bit (Hardware nahe Simulation)
 b_FIR_Dec_Int = round(b_FIR_Dec_Int*32768)/32768;
@@ -95,6 +98,7 @@ b_poly_42_Dec_Int = b_FIR_Dec_Int(3 : Mmin: end);
 b_poly_43_Dec_Int = b_FIR_Dec_Int(4 : Mmin: end);
 
 
+pause
 % --- Design des Kernel-Filters
 clear fo mo w;
 Fs_Kernel = Fs / Mmin;
@@ -115,13 +119,27 @@ b_Kernel = round(b_Kernel*32768)/32768;
 
 fprintf("Das Kernel-Filter hat die Ordnung N_Kernel = %d.\n \n", N_Kernel);
 
-hz = freqz(b_Kernel,1, Mmin*2*pi*freq);
-plot(freq*Fs,db(hz));
-legend("FIR Filter", "Dez/Int-Filter", "Kernel-Filter");
+hz_kernel = freqz(b_Kernel, 1, Mmin*2*pi*freq);
+figure(2);
+plot(freq*Fs, db(hz_kernel)), title  ('Amplitudengang des Kernfilters');
+xlabel('Frequenz in Hz'), ylabel('|H| in dB'), grid on, ylim([-150 20]);
+
+figure(3);
+plot(freq*Fs, db(hz_kernel), freq*Fs, db(hz_DecInt)); hold on
+plot(freq*Fs,db(hz_kernel) + 2 * db(hz_DecInt)), xlabel('Frequenz in Hz'), ylabel('|H| in dB'), grid on, ylim([-150 20]);
+%title('Amplitudengang der gesamten Filterkette')
+
+legend("Kernfilter", "Dec/Int-Filter", "Filterkette");
+f = gcf;
+exportgraphics(f,'Images/Lab3-H_chain2.eps','ContentType','vector');
 
 % this is provided in order to let the script end correctly, remove later
 N_FIR_kernel_MM = N_Kernel;
 
+tau = (Mmin / 2 * N_Kernel + N_FIR_Dec_Int) * 1/Fs;
+
+fprintf("Die Laufzeitverzögerung durch das Multiratenfilter beträgt " + ...
+    "%d * Ts oder %f ms.\n", tau * Fs, tau * 1000);
 
 
 %---------------------------------------------------------------------------
@@ -194,30 +212,36 @@ fprintf(file_ID, '\n// KERNEL FILTER\n');
 fprintf(file_ID, 'short H_filt_Kernel[N_delays_Kernel]; \n');
 write_coeff(file_ID, 'b_Kernel', b_Kernel, length(b_Kernel));
 
-fprintf(file_ID, 'p2p_H_polyphase_filt_DEC[NUM_POLY_BRANCHES];\n');
+fprintf(file_ID, 'short * p2p_H_polyphase_filt_DEC[NUM_POLY_BRANCHES];\n');
+fprintf(file_ID, 'short * p2p_H_polyphase_filt_INT[NUM_POLY_BRANCHES];\n');
+fprintf(file_ID, 'short int * delays[NUM_POLY_BRANCHES];\n');
+fprintf(file_ID, 'short * p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES];\n');
+fprintf(file_ID, '\n');
+fprintf(file_ID, ['/* *** Diese Definitionen müssen während der Laufzeit ' ...
+    'ausgeführt werden und daher aus dem .h-File in die main.c kopiert werden! ***\n']);
 
 for idx = 0:Mmin-1
     fprintf(file_ID, 'p2p_H_polyphase_filt_DEC[%d] = H_filt_poly_4%d_Dec;\n', idx, Mmin-1-idx);
 end
 fprintf(file_ID, '\n');
-fprintf(file_ID, 'p2p_H_polyphase_filt_INT[NUM_POLY_BRANCHES];\n');
+
 
 for idx = 0:Mmin-1
     idx2 = rem(idx + 1, Mmin);
     fprintf(file_ID, 'p2p_H_polyphase_filt_INT[%d] = H_filt_poly_4%d_Int;\n', idx, idx2);
 end
 fprintf(file_ID, '\n');
-fprintf(file_ID, 'delays[NUM_POLY_BRANCHES];\n');
 
 for idx = 0:Mmin-1
     fprintf(file_ID, 'delays[%d] = N_delays_poly_4%d_Dec_Int;\n', idx, Mmin - idx - 1);
 end
 fprintf(file_ID, '\n');
-fprintf(file_ID, 'p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES];\n');
 
 for idx = 0:Mmin-1
     fprintf(file_ID, 'p2p_b_boly_Dec_Int[%d] = N_delays_poly_4%d_Dec_Int;\n', idx, Mmin - idx - 1);
 end
+
+fprintf(file_ID, '*** */');
 
 fclose(file_ID);
 

@@ -67,26 +67,29 @@ short b_Kernel[117]={
     -23,     56,     12,    -55,    -15,     39,
      -1,   -104,     63,};
 
-p2p_H_polyphase_filt_DEC[NUM_POLY_BRANCHES];
+short * p2p_H_polyphase_filt_DEC[NUM_POLY_BRANCHES];
+short * p2p_H_polyphase_filt_INT[NUM_POLY_BRANCHES];
+short int * delays[NUM_POLY_BRANCHES];
+short * p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES];
+
+/* *** Diese Definitionen müssen während der Laufzeit ausgeführt werden und daher aus dem .h-File in die main.c kopiert werden! ***
 p2p_H_polyphase_filt_DEC[0] = H_filt_poly_43_Dec;
 p2p_H_polyphase_filt_DEC[1] = H_filt_poly_42_Dec;
 p2p_H_polyphase_filt_DEC[2] = H_filt_poly_41_Dec;
 p2p_H_polyphase_filt_DEC[3] = H_filt_poly_40_Dec;
 
-p2p_H_polyphase_filt_INT[NUM_POLY_BRANCHES];
 p2p_H_polyphase_filt_INT[0] = H_filt_poly_41_Int;
 p2p_H_polyphase_filt_INT[1] = H_filt_poly_42_Int;
 p2p_H_polyphase_filt_INT[2] = H_filt_poly_43_Int;
 p2p_H_polyphase_filt_INT[3] = H_filt_poly_40_Int;
 
-delays[NUM_POLY_BRANCHES];
 delays[0] = N_delays_poly_43_Dec_Int;
 delays[1] = N_delays_poly_42_Dec_Int;
 delays[2] = N_delays_poly_41_Dec_Int;
 delays[3] = N_delays_poly_40_Dec_Int;
 
-p2p_b_boly_Dec_Int[NUM_POLY_BRANCHES];
 p2p_b_boly_Dec_Int[0] = N_delays_poly_43_Dec_Int;
 p2p_b_boly_Dec_Int[1] = N_delays_poly_42_Dec_Int;
 p2p_b_boly_Dec_Int[2] = N_delays_poly_41_Dec_Int;
 p2p_b_boly_Dec_Int[3] = N_delays_poly_40_Dec_Int;
+*** */
