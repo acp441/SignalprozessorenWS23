@@ -1,0 +1,760 @@
+******************************************************************************
+               TMS320C6x Linker PC v8.3.12                     
+******************************************************************************
+>> Linked Tue Jan  9 10:20:44 2024
+
+OUTPUT FILE NAME:   <adda_simple.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 118070a0
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L2RAM                 11800000   00040000  00009604  000369fc  RWIX
+  L1PRAM                11e00200   00003e00  00000200  00003c00  RWIX
+  L1DRAM                11f00040   00003fc0  00001020  00002fa0  RWIX
+  SHAREDRAM             80002400   0001dc00  00000000  0001dc00  RWIX
+  SDRAM                 c0000000   04000000  00001f10  03ffe0f0  RWIX
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+11800000    11800000    00007780   00007780    r-x
+  11800000    11800000    00007780   00007780    r-x .text
+11807780    11807780    00001b04   00000000    rw-
+  11807780    11807780    00001000   00000000    rw- .sysmem
+  11808780    11808780    00000648   00000000    rw- .fardata
+  11808dc8    11808dc8    0000048c   00000000    rw- .far
+  11809258    11809258    0000001a   00000000    rw- .bss
+  11809274    11809274    00000010   00000000    rw- .neardata
+11809288    11809288    00000380   00000380    r--
+  11809288    11809288    00000330   00000330    r-- .const
+  118095b8    118095b8    00000050   00000050    r-- .switch
+11e00200    11e00200    00000200   00000200    r-x
+  11e00200    11e00200    00000200   00000200    r-x .text_interrupt
+11f00040    11f00040    00001020   00000000    rw-
+  11f00040    11f00040    00001000   00000000    rw- .stack
+  11f01040    11f01040    00000020   00000000    rw- .data_crit
+c0000000    c0000000    000019f0   000019f0    r-x
+  c0000000    c0000000    00001580   00001580    r-x .text_slow
+  c0001580    c0001580    00000470   00000470    r-- .const_slow
+c00019f0    c00019f0    00000120   00000000    rw-
+  c00019f0    c00019f0    00000120   00000000    rw- .cio
+c0001b10    c0001b10    00000400   00000400    r--
+  c0001b10    c0001b10    00000400   00000400    r-- .cinit
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.text      0    11800000    00007780     
+                  11800000    000020c0     rts6740_elf.lib : _printfi.c.obj (.text:__TI_printfi)
+                  118020c0    00000660                     : _printfi.c.obj (.text:_pconv_a)
+                  11802720    00000600                     : divd.c.obj (.text:__c6xabi_divd)
+                  11802d20    00000400                     : _printfi.c.obj (.text:_pconv_g)
+                  11803120    000003c0                     : memory.c.obj (.text:free)
+                  118034e0    00000380     main_adda_simple_Lab.obj (.text:retain)
+                  11803860    00000300     i2c.obj (.text)
+                  11803b60    000002e0     rts6740_elf.lib : fputs.c.obj (.text:fputs)
+                  11803e40    000002a0                     : _printfi.c.obj (.text:_pconv_e)
+                  118040e0    000002a0                     : _printfi.c.obj (.text:fcvt)
+                  11804380    00000260                     : imath64.c.obj (.text:__c6xabi_divull)
+                  118045e0    00000200                     : _printfi.c.obj (.text:_ltostr)
+                  118047e0    00000200     main_adda_simple_Lab.obj (.text)
+                  118049e0    000001c0     rts6740_elf.lib : imath40.c.obj (.text:__c6xabi_divul)
+                  11804ba0    000001c0                     : fputc.c.obj (.text:fputc)
+                  11804d60    000001c0                     : frexp.c.obj (.text:frexp)
+                  11804f20    000001c0                     : ldexp.c.obj (.text:ldexp)
+                  118050e0    000001c0                     : memory.c.obj (.text:malloc)
+                  118052a0    000001c0                     : setvbuf.c.obj (.text:setvbuf)
+                  11805460    000001a0                     : hostrename.c.obj (.text:HOSTrename)
+                  11805600    00000120                     : _printfi.c.obj (.text:_pconv_f)
+                  11805720    00000120                     : getdevice.c.obj (.text:getdevice)
+                  11805840    00000100                     : fclose.c.obj (.text:__TI_closefile)
+                  11805940    00000100                     : copy_decompress_rle.c.obj (.text:__TI_decompress_rle_core)
+                  11805a40    00000100                     : _printfi.c.obj (.text:_mcpy)
+                  11805b40    00000100                     : atoi.c.obj (.text:atoi)
+                  11805c40    00000100                     : fflush.c.obj (.text:fflush)
+                  11805d40    00000100                     : fseek.c.obj (.text:fseek)
+                  11805e40    000000e0                     : hostlseek.c.obj (.text:HOSTlseek)
+                  11805f20    000000e0                     : hostopen.c.obj (.text:HOSTopen)
+                  11806000    000000e0                     : hostwrite.c.obj (.text:HOSTwrite)
+                  118060e0    000000e0                     : _ltoa.c.obj (.text:__TI_ltoa)
+                  118061c0    000000e0                     : _io_perm.c.obj (.text:__TI_wrt_ok)
+                  118062a0    000000e0                     : close.c.obj (.text:close)
+                  11806380    000000e0                     : exit.c.obj (.text:exit)
+                  11806460    000000e0                     : memset.c.obj (.text:memset)
+                  11806540    000000e0                     : printf.c.obj (.text:printf)
+                  11806620    000000c0                     : hostread.c.obj (.text:HOSTread)
+                  118066e0    000000c0                     : hostunlink.c.obj (.text:HOSTunlink)
+                  118067a0    000000c0                     : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  11806860    000000c0                     : divu.asm.obj (.text:__divu)
+                  11806920    000000c0                     : memory.c.obj (.text:mremove)
+                  118069e0    000000c0                     : tls.c.obj (.text:tls:init:__TI_tls_init)
+                  11806aa0    000000a0                     : hostclose.c.obj (.text:HOSTclose)
+                  11806b40    000000a0                     : fopen.c.obj (.text:__TI_cleanup)
+                  11806be0    000000a0                     : fflush.c.obj (.text:__TI_doflush)
+                  11806c80    000000a0                     : remu.asm.obj (.text:__remu)
+                  11806d20    000000a0                     : _printfi.c.obj (.text:_ecpy)
+                  11806dc0    000000a0                     : getdevice.c.obj (.text:finddevice)
+                  11806e60    000000a0                     : memcpy64.asm.obj (.text:memcpy)
+                  11806f00    000000a0                     : memory.c.obj (.text:minsert)
+                  11806fa0    00000080                     : trgmsg.c.obj (.text:__TI_readmsg)
+                  11807020    00000080                     : llshift.c.obj (.text:__c6xabi_llshl)
+                  118070a0    00000080                     : boot.c.obj (.text:_c_int00)
+                  11807120    00000080                     : unlink.c.obj (.text:unlink)
+                  118071a0    00000060     FIR_filter_asm_sc.obj (.text)
+                  11807200    00000060     rts6740_elf.lib : trgmsg.c.obj (.text:__TI_writemsg)
+                  11807260    00000060                     : llshift.c.obj (.text:__c6xabi_llshru)
+                  118072c0    00000060                     : imath64.c.obj (.text:_subcull)
+                  11807320    00000060                     : lseek.c.obj (.text:lseek)
+                  11807380    00000060                     : memccpy.c.obj (.text:memccpy)
+                  118073e0    00000060                     : write.c.obj (.text:write)
+                  11807440    00000040                     : frcmpyd_div.c.obj (.text:__TI_frcmpyd_div)
+                  11807480    00000040                     : isinf.c.obj (.text:__c6xabi_isinf)
+                  118074c0    00000040                     : _printfi.c.obj (.text:__c6xabi_isnan)
+                  11807500    00000040                     : args_main.c.obj (.text:_args_main)
+                  11807540    00000040                     : wcslen.c.obj (.text:wcslen)
+                  11807580    00000020                     : errno.c.obj (.text:__c6xabi_errno_addr)
+                  118075a0    00000020                     : push.asm.obj (.text:__pop_rts)
+                  118075c0    00000020                     : push.asm.obj (.text:__push_rts)
+                  118075e0    00000020                     : _lock.c.obj (.text:_nop)
+                  11807600    00000020                     : printf.c.obj (.text:_outc)
+                  11807620    00000020                     : printf.c.obj (.text:_outs)
+                  11807640    00000020                     : signbit.c.obj (.text:_signbit)
+                  11807660    00000020                     : startup.c.obj (.text:_system_post_cinit)
+                  11807680    00000020                     : pre_init.c.obj (.text:_system_pre_init)
+                  118076a0    00000020                     : exit.c.obj (.text:abort)
+                  118076c0    00000020                     : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  118076e0    00000020                     : copy_decompress_rle.c.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  11807700    00000010     adda.obj ($Tramp$S$$ADC_start)
+                  11807710    00000010     adda.obj ($Tramp$S$$DAC_start)
+                  11807720    00000010     pru.obj ($Tramp$S$$PRU_run)
+                  11807730    00000010     pru.obj ($Tramp$S$$PRU_load)
+                  11807740    00000010     pru.obj ($Tramp$S$$PRU_init)
+                  11807750    00000010     adda.obj ($Tramp$S$$DAC_config)
+                  11807760    00000010     adda.obj ($Tramp$S$$ADC_config)
+                  11807770    00000010     i2c.obj ($Tramp$S$$I2C_init)
+
+.sysmem    0    11807780    00001000     UNINITIALIZED
+                  11807780    00000008     rts6740_elf.lib : memory.c.obj (.sysmem)
+                  11807788    00000ff8     --HOLE--
+
+.fardata   0    11808780    00000648     UNINITIALIZED
+                  11808780    000001e0     rts6740_elf.lib : defs.c.obj (.fardata:_ftable)
+                  11808960    000000a0                     : write.c.obj (.fardata:_stream)
+                  11808a00    00000086     main_adda_simple_Lab.obj (.fardata:b_poly_60)
+                  11808a86    00000002     --HOLE--
+                  11808a88    00000086     main_adda_simple_Lab.obj (.fardata:b_poly_61)
+                  11808b0e    00000002     --HOLE--
+                  11808b10    00000086     main_adda_simple_Lab.obj (.fardata:b_poly_62)
+                  11808b96    00000002     --HOLE--
+                  11808b98    00000086     main_adda_simple_Lab.obj (.fardata:b_poly_63)
+                  11808c1e    00000002     --HOLE--
+                  11808c20    00000086     main_adda_simple_Lab.obj (.fardata:b_poly_64)
+                  11808ca6    00000002     --HOLE--
+                  11808ca8    00000084     main_adda_simple_Lab.obj (.fardata:b_poly_65)
+                  11808d2c    00000004     rts6740_elf.lib : _lock.c.obj (.fardata:_lock)
+                  11808d30    00000078                     : write.c.obj (.fardata:_device)
+                  11808da8    0000000c                     : exit.c.obj (.fardata)
+                  11808db4    00000008                     : memory.c.obj (.fardata)
+                  11808dbc    00000004                     : _lock.c.obj (.fardata:_unlock)
+                  11808dc0    00000004                     : defs.c.obj (.fardata)
+                  11808dc4    00000004                     : errno.c.obj (.fardata)
+
+.far       0    11808dc8    0000048c     UNINITIALIZED
+                  11808dc8    00000140     (.common:__TI_tmpnams)
+                  11808f08    00000086     (.common:H_filt_poly_60)
+                  11808f8e    00000002     --HOLE--
+                  11808f90    00000086     (.common:H_filt_poly_61)
+                  11809016    00000002     --HOLE--
+                  11809018    00000086     (.common:H_filt_poly_62)
+                  1180909e    00000002     --HOLE--
+                  118090a0    00000086     (.common:H_filt_poly_63)
+                  11809126    00000002     --HOLE--
+                  11809128    00000086     (.common:H_filt_poly_64)
+                  118091ae    00000002     --HOLE--
+                  118091b0    00000084     (.common:H_filt_poly_65)
+                  11809234    00000014     (.common:I2C_globals)
+                  11809248    00000008     (.common:parmbuf)
+                  11809250    00000004     (.common:dataOut)
+
+.bss       0    11809258    0000001a     UNINITIALIZED
+                  11809258    00000004     main_adda_simple_Lab.obj (.bss)
+                  1180925c    00000004     (.common:DAC_trigSrc)
+                  11809260    00000002     (.common:branch_1_buf)
+                  11809262    00000002     (.common:branch_2_buf)
+                  11809264    00000002     (.common:idx)
+                  11809266    00000002     (.common:y_H_6_0)
+                  11809268    00000002     (.common:y_H_6_1)
+                  1180926a    00000002     (.common:y_H_6_2)
+                  1180926c    00000002     (.common:y_H_6_3)
+                  1180926e    00000002     (.common:y_H_6_4)
+                  11809270    00000002     (.common:y_H_6_5)
+
+.neardata 
+*          0    11809274    00000010     UNINITIALIZED
+                  11809274    0000000c     main_adda_simple_Lab.obj (.neardata)
+                  11809280    00000004     i2c.obj (.neardata)
+
+.rodata    0    11809284    00000000     UNINITIALIZED
+
+.const     0    11809288    00000330     
+                  11809288    00000208     main_adda_simple_Lab.obj (.const:.string)
+                  11809490    00000101     rts6740_elf.lib : ctype.c.obj (.const:.string:_ctypes_)
+                  11809591    00000003     --HOLE-- [fill = 0]
+                  11809594    00000024                     : _printfi.c.obj (.const:.string)
+
+.switch    0    118095b8    00000050     
+                  118095b8    00000038     rts6740_elf.lib : _printfi.c.obj (.switch:__TI_printfi)
+                  118095f0    00000018     i2c.obj (.switch:I2C_int)
+
+.text_interrupt 
+*          0    11e00200    00000200     
+                  11e00200    00000200     i2c.obj (.text_interrupt:retain)
+
+.stack     0    11f00040    00001000     UNINITIALIZED
+                  11f00040    00000008     rts6740_elf.lib : boot.c.obj (.stack)
+                  11f00048    00000ff8     --HOLE--
+
+.cinit     0    c0001b10    00000400     
+                  c0001b10    0000039e     (.cinit..fardata.load) [load image, compression = rle]
+                  c0001eae    00000010     (.cinit..neardata.load) [load image, compression = rle]
+                  c0001ebe    0000000b     (.cinit..far.load) [load image, compression = rle]
+                  c0001ec9    00000009     (.cinit..bss.load) [load image, compression = rle]
+                  c0001ed2    00000009     (.cinit..data_crit.load) [load image, compression = rle]
+                  c0001edb    00000001     --HOLE-- [fill = 0]
+                  c0001edc    00000008     (__TI_handler_table)
+                  c0001ee4    00000004     --HOLE-- [fill = 0]
+                  c0001ee8    00000028     (__TI_cinit_table)
+
+.init_array 
+*          0    c0000000    00000000     UNINITIALIZED
+
+.cio       0    c00019f0    00000120     UNINITIALIZED
+                  c00019f0    00000120     rts6740_elf.lib : trgmsg.c.obj (.cio)
+
+.data_crit 
+*          0    11f01040    00000020     UNINITIALIZED
+                  11f01040    00000020     main_adda_simple_Lab.obj (.data_crit)
+
+.text_slow 
+*          0    c0000000    00001580     
+                  c0000000    00001240     adda.obj (.text_slow)
+                  c0001240    00000180     pru.obj (.text_slow)
+                  c00013c0    00000160     i2c.obj (.text_slow)
+                  c0001520    00000010     i2c.obj ($Tramp$S$$I2C_writeRead)
+                  c0001530    00000010     i2c.obj ($Tramp$S$$I2C_write)
+                  c0001540    00000010     rts6740_elf.lib : remu.asm.obj ($Tramp$S$$__c6xabi_remu)
+                  c0001550    00000010                     : divu.asm.obj ($Tramp$S$$__c6xabi_divu)
+                  c0001560    00000010                     : memcpy64.asm.obj ($Tramp$S$$memcpy)
+                  c0001570    00000010     --HOLE-- [fill = 00000000]
+
+.const_slow 
+*          0    c0001580    00000470     
+                  c0001580    00000470     main_adda_simple_Lab.obj (.const_slow)
+
+MODULE SUMMARY
+
+       Module                       code    ro data   rw data
+       ------                       ----    -------   -------
+    .\
+       adda.obj                     4736    0         4      
+       main_adda_simple_Lab.obj     1408    1656      1674   
+       i2c.obj                      1680    24        24     
+       pru.obj                      432     0         0      
+       FIR_filter_asm_sc.obj        96      0         0      
+    +--+----------------------------+-------+---------+---------+
+       Total:                       8352    1680      1702   
+                                                             
+    C:\ti\ccs1230\ccs\tools\compiler\ti-cgt-c6000_8.3.12\lib\rts6740_elf.lib
+       _printfi.c.obj               13664   92        0      
+       memory.c.obj                 1760    0         8      
+       divd.c.obj                   1536    0         0      
+       defs.c.obj                   0       0         804    
+       fputs.c.obj                  736     0         0      
+       imath64.c.obj                704     0         0      
+       trgmsg.c.obj                 224     0         288    
+       fputc.c.obj                  448     0         0      
+       frexp.c.obj                  448     0         0      
+       getdevice.c.obj              448     0         0      
+       imath40.c.obj                448     0         0      
+       ldexp.c.obj                  448     0         0      
+       setvbuf.c.obj                448     0         0      
+       fflush.c.obj                 416     0         0      
+       hostrename.c.obj             416     0         0      
+       write.c.obj                  96      0         280    
+       copy_decompress_rle.c.obj    288     0         0      
+       printf.c.obj                 288     0         0      
+       exit.c.obj                   256     0         12     
+       ctype.c.obj                  0       257       0      
+       atoi.c.obj                   256     0         0      
+       fclose.c.obj                 256     0         0      
+       fseek.c.obj                  256     0         0      
+       hostopen.c.obj               224     0         8      
+       _io_perm.c.obj               224     0         0      
+       _ltoa.c.obj                  224     0         0      
+       close.c.obj                  224     0         0      
+       hostlseek.c.obj              224     0         0      
+       hostwrite.c.obj              224     0         0      
+       llshift.c.obj                224     0         0      
+       memset.c.obj                 224     0         0      
+       divu.asm.obj                 208     0         0      
+       autoinit.c.obj               192     0         0      
+       hostread.c.obj               192     0         0      
+       hostunlink.c.obj             192     0         0      
+       tls.c.obj                    192     0         0      
+       memcpy64.asm.obj             176     0         0      
+       remu.asm.obj                 176     0         0      
+       fopen.c.obj                  160     0         0      
+       hostclose.c.obj              160     0         0      
+       boot.c.obj                   128     0         0      
+       unlink.c.obj                 128     0         0      
+       lseek.c.obj                  96      0         0      
+       memccpy.c.obj                96      0         0      
+       args_main.c.obj              64      0         0      
+       frcmpyd_div.c.obj            64      0         0      
+       isinf.c.obj                  64      0         0      
+       push.asm.obj                 64      0         0      
+       wcslen.c.obj                 64      0         0      
+       _lock.c.obj                  32      0         8      
+       errno.c.obj                  32      0         4      
+       copy_decompress_none.c.obj   32      0         0      
+       pre_init.c.obj               32      0         0      
+       signbit.c.obj                32      0         0      
+       startup.c.obj                32      0         0      
+    +--+----------------------------+-------+---------+---------+
+       Total:                       28240   349       1412   
+                                                             
+       Heap:                        0       0         4096   
+       Stack:                       0       0         4096   
+       Linker Generated:            0       1019      0      
+    +--+----------------------------+-------+---------+---------+
+       Grand Total:                 36592   3048      11306  
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ c0001ee8 records: 5, size/record: 8, table size: 40
+	.fardata: load addr=c0001b10, load size=0000039e bytes, run addr=11808780, run size=00000648 bytes, compression=rle
+	.neardata: load addr=c0001eae, load size=00000010 bytes, run addr=11809274, run size=00000010 bytes, compression=rle
+	.far: load addr=c0001ebe, load size=0000000b bytes, run addr=11808dc8, run size=0000048c bytes, compression=rle
+	.bss: load addr=c0001ec9, load size=00000009 bytes, run addr=11809258, run size=0000001a bytes, compression=rle
+	.data_crit: load addr=c0001ed2, load size=00000009 bytes, run addr=11f01040, run size=00000020 bytes, compression=rle
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ c0001edc records: 2, size/record: 4, table size: 8
+	index: 0, handler: __TI_decompress_rle24
+	index: 1, handler: __TI_decompress_none
+
+
+FAR CALL TRAMPOLINES
+
+callee name               trampoline name
+   callee addr  tramp addr   call addr  call info
+--------------  -----------  ---------  ----------------
+$.text_slow:adda.obj$0xb6c  $Tramp$S$$ADC_start
+   c0000b6c     11807700     118049a0   main_adda_simple_Lab.obj (.text)
+$.text_slow:adda.obj$0x18c  $Tramp$S$$DAC_start
+   c000018c     11807710     11804998   main_adda_simple_Lab.obj (.text)
+$.text_slow:pru.obj$0x0   $Tramp$S$$PRU_run
+   c0001240     11807720     11804980   main_adda_simple_Lab.obj (.text)
+$.text_slow:pru.obj$0x80  $Tramp$S$$PRU_load
+   c00012c0     11807730     11804970   main_adda_simple_Lab.obj (.text)
+$.text_slow:pru.obj$0xc0  $Tramp$S$$PRU_init
+   c0001300     11807740     11804964   main_adda_simple_Lab.obj (.text)
+$.text_slow:adda.obj$0x340  $Tramp$S$$DAC_config
+   c0000340     11807750     11804954   main_adda_simple_Lab.obj (.text)
+$.text_slow:adda.obj$0xbb4  $Tramp$S$$ADC_config
+   c0000bb4     11807760     1180492c   main_adda_simple_Lab.obj (.text)
+$.text_slow:i2c.obj$0x0   $Tramp$S$$I2C_init
+   c00013c0     11807770     11804868   main_adda_simple_Lab.obj (.text)
+$.text:i2c.obj$0x0        $Tramp$S$$I2C_writeRead
+   11803860     c0001520     c0000064   adda.obj (.text_slow)
+                             c0000100   adda.obj (.text_slow)
+                             c00001f8   adda.obj (.text_slow)
+                             c00002ac   adda.obj (.text_slow)
+                             c0000390   adda.obj (.text_slow)
+                             c0000438   adda.obj (.text_slow)
+                             c00004cc   adda.obj (.text_slow)
+                             c00006f0   adda.obj (.text_slow)
+                             c0000c04   adda.obj (.text_slow)
+                             c0000cb8   adda.obj (.text_slow)
+                             c0000d50   adda.obj (.text_slow)
+                             c0000fa4   adda.obj (.text_slow)
+$.text:i2c.obj$0xe4       $Tramp$S$$I2C_write
+   11803944     c0001530     c00000b8   adda.obj (.text_slow)
+                             c0000148   adda.obj (.text_slow)
+                             c0000268   adda.obj (.text_slow)
+                             c00002f4   adda.obj (.text_slow)
+                             c00003f0   adda.obj (.text_slow)
+                             c0000484   adda.obj (.text_slow)
+                             c0000514   adda.obj (.text_slow)
+                             c0000560   adda.obj (.text_slow)
+                             c0000738   adda.obj (.text_slow)
+                             c0000c70   adda.obj (.text_slow)
+                             c0000d08   adda.obj (.text_slow)
+                             c0000da4   adda.obj (.text_slow)
+                             c0000df0   adda.obj (.text_slow)
+                             c0000ff8   adda.obj (.text_slow)
+$.text:__remu:rts6740_elf.lib<remu.asm.obj>$0x0  $Tramp$S$$__c6xabi_remu
+   11806c80     c0001540     c0000a08   adda.obj (.text_slow)
+                             c0000aa8   adda.obj (.text_slow)
+                             c0000e90   adda.obj (.text_slow)
+                             c0000f28   adda.obj (.text_slow)
+$.text:__divu:rts6740_elf.lib<divu.asm.obj>$0x0  $Tramp$S$$__c6xabi_divu
+   11806860     c0001550     c0000a18   adda.obj (.text_slow)
+                             c0000a98   adda.obj (.text_slow)
+                             c0000ea4   adda.obj (.text_slow)
+                             c0000f18   adda.obj (.text_slow)
+                             c00013d4   i2c.obj (.text_slow)
+$.text:memcpy:rts6740_elf.lib<memcpy64.asm.obj>$0x0  $Tramp$S$$memcpy
+   11806e60     c0001560     c00012f0   pru.obj (.text_slow)
+
+[13 trampolines]
+[44 trampoline calls]
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address   name                           
+-------   ----                           
+c0000bb4  ADC_config                     
+c0000b6c  ADC_start                      
+c0000b20  ADC_stop                       
+118076a0  C$$EXIT                        
+11807258  C$$IO$$                        
+c0000340  DAC_config                     
+c000018c  DAC_start                      
+c0000000  DAC_stop                       
+1180925c  DAC_trigSrc                    
+118071a0  FIR_filter_sc                  
+11806aa0  HOSTclose                      
+11805e40  HOSTlseek                      
+11805f20  HOSTopen                       
+11806620  HOSTread                       
+11805460  HOSTrename                     
+118066e0  HOSTunlink                     
+11806000  HOSTwrite                      
+11808f08  H_filt_poly_60                 
+11808f90  H_filt_poly_61                 
+11809018  H_filt_poly_62                 
+118090a0  H_filt_poly_63                 
+11809128  H_filt_poly_64                 
+118091b0  H_filt_poly_65                 
+11809234  I2C_globals                    
+c00013c0  I2C_init                       
+11e00200  I2C_int                        
+11803a88  I2C_read                       
+11803a04  I2C_recover                    
+11803944  I2C_write                      
+11803860  I2C_writeRead                  
+80002200  INT_init                       
+80002294  INT_instFunc                   
+80002238  INT_sel                        
+800022f4  INT_start                      
+11e00000  INT_vectorTable                
+c0001580  PRU_addaCode                   
+11809274  PRU_addaRegs                   
+c0001384  PRU_halt                       
+c0001300  PRU_init                       
+c00012c0  PRU_load                       
+c0001240  PRU_run                        
+118047e0  System_puts                    
+80001180  UNIDAQ2_init                   
+c00019f0  __CIOBUF_                      
+c0001ee8  __TI_CINIT_Base                
+c0001f10  __TI_CINIT_Limit               
+c0001edc  __TI_Handler_Table_Base        
+c0001ee4  __TI_Handler_Table_Limit       
+11f01040  __TI_STACK_END                 
+00001000  __TI_STACK_SIZE                
+11809258  __TI_STATIC_BASE               
+00001000  __TI_SYSMEM_SIZE               
+UNDEFED   __TI_TLS_INIT_Base             
+UNDEFED   __TI_TLS_INIT_Limit            
+118067a0  __TI_auto_init_nobinit_nopinit 
+11806b40  __TI_cleanup                   
+11808da8  __TI_cleanup_ptr               
+11805840  __TI_closefile                 
+118076c0  __TI_decompress_none           
+118076e0  __TI_decompress_rle24          
+11806be0  __TI_doflush                   
+11808dac  __TI_dtors_ptr                 
+11808db0  __TI_enable_exit_profile_output
+11807440  __TI_frcmpyd_div               
+11808dc0  __TI_ft_end                    
+118060e0  __TI_ltoa                      
+ffffffff  __TI_pprof_out_hndl            
+11800000  __TI_printfi                   
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+11806fa0  __TI_readmsg                   
+118069e0  __TI_tls_init                  
+11808dc8  __TI_tmpnams                   
+11807200  __TI_writemsg                  
+118061c0  __TI_wrt_ok                    
+ffffffff  __binit__                      
+11802720  __c6xabi_divd                  
+11806860  __c6xabi_divu                  
+118049e0  __c6xabi_divul                 
+11804380  __c6xabi_divull                
+11807580  __c6xabi_errno_addr            
+11807480  __c6xabi_isinf                 
+11807020  __c6xabi_llshl                 
+11807260  __c6xabi_llshru                
+118075a0  __c6xabi_pop_rts               
+118075c0  __c6xabi_push_rts              
+11806c80  __c6xabi_remu                  
+ffffffff  __c_args__                     
+11806860  __divu                         
+11808dc4  __errno                        
+118075a0  __pop_rts                      
+118075c0  __push_rts                     
+11806c80  __remu                         
+11807500  _args_main                     
+118070a0  _c_int00                       
+11809490  _ctypes_                       
+11808d30  _device                        
+11808780  _ftable                        
+11808d2c  _lock                          
+118075e0  _nop                           
+11807640  _signbit                       
+11f00040  _stack                         
+11808960  _stream                        
+118072c0  _subcull                       
+11807780  _sys_memory                    
+11807660  _system_post_cinit             
+11807680  _system_pre_init               
+11808dbc  _unlock                        
+118076a0  abort                          
+11803564  adcInt                         
+11805b40  atoi                           
+11808a00  b_poly_60                      
+11808a88  b_poly_61                      
+11808b10  b_poly_62                      
+11808b98  b_poly_63                      
+11808c20  b_poly_64                      
+11808ca8  b_poly_65                      
+ffffffff  binit                          
+11809260  branch_1_buf                   
+11809262  branch_2_buf                   
+118062a0  close                          
+118034e0  dacInt                         
+11809250  dataOut                        
+11808dc4  errno                          
+11806380  exit                           
+11805c40  fflush                         
+11806dc0  finddevice                     
+11804ba0  fputc                          
+11803b60  fputs                          
+11803120  free                           
+11804d60  frexp                          
+11804d60  frexpl                         
+11805d40  fseek                          
+11805720  getdevice                      
+11809280  i2cRegs                        
+11809264  idx                            
+11804f20  ldexp                          
+11804f20  ldexpl                         
+11807320  lseek                          
+11804804  main                           
+118050e0  malloc                         
+11807380  memccpy                        
+11806e60  memcpy                         
+11806460  memset                         
+11809248  parmbuf                        
+11809278  poly_switch_dac                
+11806540  printf                         
+11804ba0  putc                           
+11807120  remove                         
+11f01040  sData                          
+11804f20  scalbn                         
+11804f20  scalbnl                        
+118052a0  setvbuf                        
+11807120  unlink                         
+11807540  wcslen                         
+118073e0  write                          
+11809266  y_H_6_0                        
+11809268  y_H_6_1                        
+1180926a  y_H_6_2                        
+1180926c  y_H_6_3                        
+1180926e  y_H_6_4                        
+11809270  y_H_6_5                        
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address   name                           
+-------   ----                           
+00001000  __TI_STACK_SIZE                
+00001000  __TI_SYSMEM_SIZE               
+11800000  __TI_printfi                   
+11802720  __c6xabi_divd                  
+11803120  free                           
+118034e0  dacInt                         
+11803564  adcInt                         
+11803860  I2C_writeRead                  
+11803944  I2C_write                      
+11803a04  I2C_recover                    
+11803a88  I2C_read                       
+11803b60  fputs                          
+11804380  __c6xabi_divull                
+118047e0  System_puts                    
+11804804  main                           
+118049e0  __c6xabi_divul                 
+11804ba0  fputc                          
+11804ba0  putc                           
+11804d60  frexp                          
+11804d60  frexpl                         
+11804f20  ldexp                          
+11804f20  ldexpl                         
+11804f20  scalbn                         
+11804f20  scalbnl                        
+118050e0  malloc                         
+118052a0  setvbuf                        
+11805460  HOSTrename                     
+11805720  getdevice                      
+11805840  __TI_closefile                 
+11805b40  atoi                           
+11805c40  fflush                         
+11805d40  fseek                          
+11805e40  HOSTlseek                      
+11805f20  HOSTopen                       
+11806000  HOSTwrite                      
+118060e0  __TI_ltoa                      
+118061c0  __TI_wrt_ok                    
+118062a0  close                          
+11806380  exit                           
+11806460  memset                         
+11806540  printf                         
+11806620  HOSTread                       
+118066e0  HOSTunlink                     
+118067a0  __TI_auto_init_nobinit_nopinit 
+11806860  __c6xabi_divu                  
+11806860  __divu                         
+118069e0  __TI_tls_init                  
+11806aa0  HOSTclose                      
+11806b40  __TI_cleanup                   
+11806be0  __TI_doflush                   
+11806c80  __c6xabi_remu                  
+11806c80  __remu                         
+11806dc0  finddevice                     
+11806e60  memcpy                         
+11806fa0  __TI_readmsg                   
+11807020  __c6xabi_llshl                 
+118070a0  _c_int00                       
+11807120  remove                         
+11807120  unlink                         
+118071a0  FIR_filter_sc                  
+11807200  __TI_writemsg                  
+11807258  C$$IO$$                        
+11807260  __c6xabi_llshru                
+118072c0  _subcull                       
+11807320  lseek                          
+11807380  memccpy                        
+118073e0  write                          
+11807440  __TI_frcmpyd_div               
+11807480  __c6xabi_isinf                 
+11807500  _args_main                     
+11807540  wcslen                         
+11807580  __c6xabi_errno_addr            
+118075a0  __c6xabi_pop_rts               
+118075a0  __pop_rts                      
+118075c0  __c6xabi_push_rts              
+118075c0  __push_rts                     
+118075e0  _nop                           
+11807640  _signbit                       
+11807660  _system_post_cinit             
+11807680  _system_pre_init               
+118076a0  C$$EXIT                        
+118076a0  abort                          
+118076c0  __TI_decompress_none           
+118076e0  __TI_decompress_rle24          
+11807780  _sys_memory                    
+11808780  _ftable                        
+11808960  _stream                        
+11808a00  b_poly_60                      
+11808a88  b_poly_61                      
+11808b10  b_poly_62                      
+11808b98  b_poly_63                      
+11808c20  b_poly_64                      
+11808ca8  b_poly_65                      
+11808d2c  _lock                          
+11808d30  _device                        
+11808da8  __TI_cleanup_ptr               
+11808dac  __TI_dtors_ptr                 
+11808db0  __TI_enable_exit_profile_output
+11808dbc  _unlock                        
+11808dc0  __TI_ft_end                    
+11808dc4  __errno                        
+11808dc4  errno                          
+11808dc8  __TI_tmpnams                   
+11808f08  H_filt_poly_60                 
+11808f90  H_filt_poly_61                 
+11809018  H_filt_poly_62                 
+118090a0  H_filt_poly_63                 
+11809128  H_filt_poly_64                 
+118091b0  H_filt_poly_65                 
+11809234  I2C_globals                    
+11809248  parmbuf                        
+11809250  dataOut                        
+11809258  __TI_STATIC_BASE               
+1180925c  DAC_trigSrc                    
+11809260  branch_1_buf                   
+11809262  branch_2_buf                   
+11809264  idx                            
+11809266  y_H_6_0                        
+11809268  y_H_6_1                        
+1180926a  y_H_6_2                        
+1180926c  y_H_6_3                        
+1180926e  y_H_6_4                        
+11809270  y_H_6_5                        
+11809274  PRU_addaRegs                   
+11809278  poly_switch_dac                
+11809280  i2cRegs                        
+11809490  _ctypes_                       
+11e00000  INT_vectorTable                
+11e00200  I2C_int                        
+11f00040  _stack                         
+11f01040  __TI_STACK_END                 
+11f01040  sData                          
+80001180  UNIDAQ2_init                   
+80002200  INT_init                       
+80002238  INT_sel                        
+80002294  INT_instFunc                   
+800022f4  INT_start                      
+c0000000  DAC_stop                       
+c000018c  DAC_start                      
+c0000340  DAC_config                     
+c0000b20  ADC_stop                       
+c0000b6c  ADC_start                      
+c0000bb4  ADC_config                     
+c0001240  PRU_run                        
+c00012c0  PRU_load                       
+c0001300  PRU_init                       
+c0001384  PRU_halt                       
+c00013c0  I2C_init                       
+c0001580  PRU_addaCode                   
+c00019f0  __CIOBUF_                      
+c0001edc  __TI_Handler_Table_Base        
+c0001ee4  __TI_Handler_Table_Limit       
+c0001ee8  __TI_CINIT_Base                
+c0001f10  __TI_CINIT_Limit               
+ffffffff  __TI_pprof_out_hndl            
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+ffffffff  __binit__                      
+ffffffff  __c_args__                     
+ffffffff  binit                          
+UNDEFED   __TI_TLS_INIT_Base             
+UNDEFED   __TI_TLS_INIT_Limit            
+
+[162 symbols]
