@@ -1,0 +1,23 @@
+/* defines */
+#define LENGTH_ADC_BUF 1000
+#define LENGTH_DAC_BUF 1000
+
+/* Global variables */
+int16_t sCount_ADC = 0;
+int16_t sInBuf_L[LENGTH_ADC_BUF];
+int16_t sInBuf_R[LENGTH_ADC_BUF];
+int16_t sCount_DAC = 0;
+int16_t sOutBuf_L[LENGTH_DAC_BUF];
+int16_t sOutBuf_R[LENGTH_DAC_BUF];
+
+/* Insert in ISR adcInt */
+    sInBuf_L[sCount_ADC] = sData[0];
+    sInBuf_R[sCount_ADC] = sData[1];
+    if (++sCount_ADC >= LENGTH_ADC_BUF)
+        sCount_ADC = 0;
+
+/* Insert in ISR dacInt */
+    sOutBuf_L[sCount_DAC] = sData[0];
+    sOutBuf_R[sCount_DAC] = sData[1];
+    if (++sCount_DAC >= LENGTH_DAC_BUF)
+        sCount_DAC = 0;

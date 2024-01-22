@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configurations XML_version="1.2" id="configurations_0">
+    <configuration XML_version="1.2" id="Texas Instruments XDS2xx USB Debug Probe_0">
+        <instance XML_version="1.2" desc="Texas Instruments XDS2xx USB Debug Probe_0" href="connections/TIXDS2XXUSB_Connection.xml" id="Texas Instruments XDS2xx USB Debug Probe_0" xml="TIXDS2XXUSB_Connection.xml" xmlpath="connections"/>
+        <connection XML_version="1.2" id="Texas Instruments XDS2xx USB Debug Probe_0">
+            <instance XML_version="1.2" href="drivers/tixds560icepick_c.xml" id="drivers" xml="tixds560icepick_c.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560c674x.xml" id="drivers" xml="tixds560c674x.xml" xmlpath="drivers"/>
+            <platform XML_version="1.2" id="platform_0">
+                <instance XML_version="1.2" desc="TMS320C6747_0" href="devices/c6747.xml" id="TMS320C6747_0" xml="c6747.xml" xmlpath="devices"/>
+            <device HW_revision="1" XML_version="1.2" description="C674x Floating point DSP" id="TMS320C6747_0" partnum="TMS320C6747">
+                    <router HW_revision="1.0" XML_version="1.2" description="ICEPick_C Router" id="IcePick_C_0" isa="ICEPICK_C">
+                        <subpath id="subpath_0">
+                            <cpu HW_revision="" XML_version="1.2" description="" id="C674X_0" isa="TMS320C674X">
+                                <property Type="filepathfield" Value="tms320c6747.gel" id="GEL File"/>
+                            </cpu>
+                        </subpath>
+                    </router>
+                </device>
+            </platform>
+        </connection>
+    </configuration>
+</configurations>
