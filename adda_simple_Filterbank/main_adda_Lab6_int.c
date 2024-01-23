@@ -29,7 +29,7 @@
 #include <math.h>							  /**< floating-point     */
 
 // includes of Lennard and Victor
-#include "Filterbaenke.h"
+#include "Perf_Recon_koeff.h"
 
 
 /***********************************************************************
@@ -80,6 +80,9 @@ volatile int16_t outData[NUM_POLY_BRANCHES];
 volatile int16_t decimated[2]; // decimated samples after polyphase filtering
 volatile int16_t x_0; // upper branch after decimation
 volatile int16_t x_1; // lower branch after decimation
+static int poly_switch_dac = 0;
+volatile int16_t dec_filtered[4];
+volatile int16_t int_filtered[2];
 
 // prototype for our filter
 short FIR_filter_sc(    short FIR_delays[],         // delay array
@@ -141,27 +144,29 @@ __interrupt void adcInt (void)
 
 // Put your ADC DSP code here ...
   static short poly_switch = 0;
-  static int16_t delay;
-
+  //static int16_t delay;
   
 
-    // Switch now starts at poly branch zero an then starts to rotate clockwise 
     switch (poly_switch) {
     case 0:
-        decimated[0] = FIR_filter_sc(H_filt_poly_20, b_poly_20, N_delays_poly_20, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection
-        x_0 = (decimated[0] + delay) / 2; // >>
+        dec_filtered[0] = FIR_filter_sc(H_filt_poly_h0_21, h0_21, N, sData[0], 15);
+        dec_filtered[1] = FIR_filter_sc(H_filt_poly_h1_21, h1_21, N, sData[0], 15);
         break;
     case 1:
-        delay = decimated[1]; // save the last decimator sample in the delay
-        decimated[1] = FIR_filter_sc(H_filt_poly_21, b_poly_21, N_delays_poly_21, sData[0], 14); // Shift by 1 (equals mul by 2) to correct interpolator specific bisection
-        x_1 = (decimated[0] - delay) / 2; // >> 
+        dec_filtered[2] = FIR_filter_sc(H_filt_poly_h0_20, h0_20, N, sData[0], 15);
+        dec_filtered[3] = FIR_filter_sc(H_filt_poly_h1_20, h1_20, N, sData[0], 15);
+
+        x_0 = dec_filtered[0] + dec_filtered[2];
+        x_1 = dec_filtered[1] + dec_filtered[3];
+
+        poly_switch_dac = 0;
+
         break;
     default:
         break;
     }
     poly_switch++;
     poly_switch %= NUM_POLY_BRANCHES;
-
 
 }
 
@@ -174,21 +179,30 @@ __interrupt void dacInt (void)
 {
 
     // Put your DAC DSP code here ...
-    static int poy_switch_dac = 0;
 
-    switch(poly_switch_dac){
+  switch(poly_switch_dac){
       case 0:
-      outData[0] = FIR_filter_sc(H_filt_poly_20, b_poly_20, N_delays_poly_20, x_0 - x_1, 15);
+      int_filtered[0] = FIR_filter_sc(H_filt_poly_g0_20, g0_20, N, x_0, 14);
+      int_filtered[1] = FIR_filter_sc(H_filt_poly_g1_20, g1_20, N, x_1, 14);
+      outData[0] = int_filtered[0] + int_filtered[1];
+      poly_switch_dac++;
       break;
 
       case 1:
-      outData[0] = FIR_filter_sc(H_filt_poly_21, b_poly_21, N_delays_poly_21, x_0 + x_1, 15);
+      int_filtered[0] = FIR_filter_sc(H_filt_poly_g0_21, g0_21, N, x_0, 14);
+      int_filtered[1] = FIR_filter_sc(H_filt_poly_g1_21, g1_21, N, x_1, 14);
+      outData[0] = int_filtered[0] + int_filtered[1];
+      poly_switch_dac = 0;
       break;
       
       default:
       break;
     }
+
+   // outData[0] = x_0;
+   // outData[1] = x_1;
     
+
     /********************************************************************************************/
 
     /*******************************************************************
@@ -196,7 +210,7 @@ __interrupt void dacInt (void)
     *******************************************************************/
     for (idx=0; idx<8; idx++)
 	{
-		PRU_addaRegs->dac[idx] = outData[0];
+		PRU_addaRegs->dac[idx] = outData[idx];
 	}
 }
 

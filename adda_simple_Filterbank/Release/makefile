@@ -10,17 +10,12 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./CircularBuffer.obj" \
 "./FIR_filter_asm_sc.obj" \
 "./adda.obj" \
 "./fir_filter_sc.obj" \
 "./i2c.obj" \
-"./main_adda_Lab3.obj" \
-"./main_adda_Lab3_dec.obj" \
-"./main_adda_Lab_pointers.obj" \
-"./main_adda_simple_Lab.obj" \
-"./main_adda_simple_Lab2_dec.obj" \
-"./main_adda_simple_Lab2_int.obj" \
+"./main_adda_Lab6_int.obj" \
+"./main_adda_Lab6_perfRecon.obj" \
 "./pru.obj" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/lnk/unidaq2.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -152,8 +147,8 @@ adda_simple.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "CircularBuffer.obj" "FIR_filter_asm_sc.obj" "adda.obj" "fir_filter_sc.obj" "i2c.obj" "main_adda_Lab3.obj" "main_adda_Lab3_dec.obj" "main_adda_Lab_pointers.obj" "main_adda_simple_Lab.obj" "main_adda_simple_Lab2_dec.obj" "main_adda_simple_Lab2_int.obj" "pru.obj" 
-	-$(RM) "CircularBuffer.d" "adda.d" "fir_filter_sc.d" "i2c.d" "main_adda_Lab3.d" "main_adda_Lab3_dec.d" "main_adda_Lab_pointers.d" "main_adda_simple_Lab.d" "main_adda_simple_Lab2_dec.d" "main_adda_simple_Lab2_int.d" "pru.d" 
+	-$(RM) "FIR_filter_asm_sc.obj" "adda.obj" "fir_filter_sc.obj" "i2c.obj" "main_adda_Lab6_int.obj" "main_adda_Lab6_perfRecon.obj" "pru.obj" 
+	-$(RM) "adda.d" "fir_filter_sc.d" "i2c.d" "main_adda_Lab6_int.d" "main_adda_Lab6_perfRecon.d" "pru.d" 
 	-$(RM) "FIR_filter_asm_sc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

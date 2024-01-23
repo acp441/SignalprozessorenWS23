@@ -14,20 +14,20 @@ ASM_SRCS += \
 C_SRCS += \
 D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/adda.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c \
-../main_adda_Lab_pointers.c \
+../main_adda_Lab6_int.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/Common/pru.c 
 
 C_DEPS += \
 ./adda.d \
 ./i2c.d \
-./main_adda_Lab_pointers.d \
+./main_adda_Lab6_int.d \
 ./pru.d 
 
 OBJS += \
 ./FIR_filter_asm_sc.obj \
 ./adda.obj \
 ./i2c.obj \
-./main_adda_Lab_pointers.obj \
+./main_adda_Lab6_int.obj \
 ./pru.obj 
 
 ASM_DEPS += \
@@ -37,13 +37,13 @@ OBJS__QUOTED += \
 "FIR_filter_asm_sc.obj" \
 "adda.obj" \
 "i2c.obj" \
-"main_adda_Lab_pointers.obj" \
+"main_adda_Lab6_int.obj" \
 "pru.obj" 
 
 C_DEPS__QUOTED += \
 "adda.d" \
 "i2c.d" \
-"main_adda_Lab_pointers.d" \
+"main_adda_Lab6_int.d" \
 "pru.d" 
 
 ASM_DEPS__QUOTED += \
@@ -55,7 +55,7 @@ ASM_SRCS__QUOTED += \
 C_SRCS__QUOTED += \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/adda.c" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c" \
-"../main_adda_Lab_pointers.c" \
+"../main_adda_Lab6_int.c" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/Common/pru.c" 
 
 

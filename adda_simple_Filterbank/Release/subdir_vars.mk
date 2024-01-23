@@ -12,92 +12,62 @@ ASM_SRCS += \
 ../FIR_filter_asm_sc.asm 
 
 C_SRCS += \
-../CircularBuffer.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/adda.c \
 ../fir_filter_sc.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c \
-../main_adda_Lab3.c \
-../main_adda_Lab3_dec.c \
-../main_adda_Lab_pointers.c \
-../main_adda_simple_Lab.c \
-../main_adda_simple_Lab2_dec.c \
-../main_adda_simple_Lab2_int.c \
+../main_adda_Lab6_int.c \
+../main_adda_Lab6_perfRecon.c \
 D:/ti_work/UniDAQ2.DSP-ADDA/Common/pru.c 
 
 C_DEPS += \
-./CircularBuffer.d \
 ./adda.d \
 ./fir_filter_sc.d \
 ./i2c.d \
-./main_adda_Lab3.d \
-./main_adda_Lab3_dec.d \
-./main_adda_Lab_pointers.d \
-./main_adda_simple_Lab.d \
-./main_adda_simple_Lab2_dec.d \
-./main_adda_simple_Lab2_int.d \
+./main_adda_Lab6_int.d \
+./main_adda_Lab6_perfRecon.d \
 ./pru.d 
 
 OBJS += \
-./CircularBuffer.obj \
 ./FIR_filter_asm_sc.obj \
 ./adda.obj \
 ./fir_filter_sc.obj \
 ./i2c.obj \
-./main_adda_Lab3.obj \
-./main_adda_Lab3_dec.obj \
-./main_adda_Lab_pointers.obj \
-./main_adda_simple_Lab.obj \
-./main_adda_simple_Lab2_dec.obj \
-./main_adda_simple_Lab2_int.obj \
+./main_adda_Lab6_int.obj \
+./main_adda_Lab6_perfRecon.obj \
 ./pru.obj 
 
 ASM_DEPS += \
 ./FIR_filter_asm_sc.d 
 
 OBJS__QUOTED += \
-"CircularBuffer.obj" \
 "FIR_filter_asm_sc.obj" \
 "adda.obj" \
 "fir_filter_sc.obj" \
 "i2c.obj" \
-"main_adda_Lab3.obj" \
-"main_adda_Lab3_dec.obj" \
-"main_adda_Lab_pointers.obj" \
-"main_adda_simple_Lab.obj" \
-"main_adda_simple_Lab2_dec.obj" \
-"main_adda_simple_Lab2_int.obj" \
+"main_adda_Lab6_int.obj" \
+"main_adda_Lab6_perfRecon.obj" \
 "pru.obj" 
 
 C_DEPS__QUOTED += \
-"CircularBuffer.d" \
 "adda.d" \
 "fir_filter_sc.d" \
 "i2c.d" \
-"main_adda_Lab3.d" \
-"main_adda_Lab3_dec.d" \
-"main_adda_Lab_pointers.d" \
-"main_adda_simple_Lab.d" \
-"main_adda_simple_Lab2_dec.d" \
-"main_adda_simple_Lab2_int.d" \
+"main_adda_Lab6_int.d" \
+"main_adda_Lab6_perfRecon.d" \
 "pru.d" 
 
 ASM_DEPS__QUOTED += \
 "FIR_filter_asm_sc.d" 
 
+ASM_SRCS__QUOTED += \
+"../FIR_filter_asm_sc.asm" 
+
 C_SRCS__QUOTED += \
-"../CircularBuffer.c" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/adda.c" \
 "../fir_filter_sc.c" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/drv/i2c.c" \
-"../main_adda_Lab3.c" \
-"../main_adda_Lab3_dec.c" \
-"../main_adda_Lab_pointers.c" \
-"../main_adda_simple_Lab.c" \
-"../main_adda_simple_Lab2_dec.c" \
-"../main_adda_simple_Lab2_int.c" \
+"../main_adda_Lab6_int.c" \
+"../main_adda_Lab6_perfRecon.c" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/Common/pru.c" 
-
-ASM_SRCS__QUOTED += \
-"../FIR_filter_asm_sc.asm" 
 
 

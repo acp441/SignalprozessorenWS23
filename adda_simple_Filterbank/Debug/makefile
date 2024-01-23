@@ -13,7 +13,7 @@ ORDERED_OBJS += \
 "./FIR_filter_asm_sc.obj" \
 "./adda.obj" \
 "./i2c.obj" \
-"./main_adda_Lab_pointers.obj" \
+"./main_adda_Lab6_int.obj" \
 "./pru.obj" \
 "D:/ti_work/UniDAQ2.DSP-ADDA/BoardSupport/lnk/unidaq2.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -144,8 +144,8 @@ adda_simple.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "FIR_filter_asm_sc.obj" "adda.obj" "i2c.obj" "main_adda_Lab_pointers.obj" "pru.obj" 
-	-$(RM) "adda.d" "i2c.d" "main_adda_Lab_pointers.d" "pru.d" 
+	-$(RM) "FIR_filter_asm_sc.obj" "adda.obj" "i2c.obj" "main_adda_Lab6_int.obj" "pru.obj" 
+	-$(RM) "adda.d" "i2c.d" "main_adda_Lab6_int.d" "pru.d" 
 	-$(RM) "FIR_filter_asm_sc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
